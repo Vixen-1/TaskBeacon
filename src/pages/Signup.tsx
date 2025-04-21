@@ -1,14 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { Button } from "@mui/material";
 import axios from "axios";
-import {
-  Box,
-  Stack,
-  TextField,
-  Typography
-} from "@mui/material";
+import { Box, Stack, TextField, Typography } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
 import image from "../assets/main-bg.jpg";
@@ -21,12 +16,22 @@ interface SignupFormData {
   password: string;
 }
 
+interface OtpFormData {
+  otp: string;
+  email: string;
+}
+
 const Signup: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<SignupFormData>({
     name: "",
     email: "",
     password: "",
+  });
+
+  const [otpData, setOtpData] = useState<OtpFormData>({
+    otp: "",
+    email: "",
   });
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState({
@@ -36,19 +41,8 @@ const Signup: React.FC = () => {
   });
   const navigate = useNavigate();
 
-  const theme = createTheme({
-    components: {
-      MuiTextField: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "rgba(255,255,255, 0.6)",
-            borderRadius: "8px",
-            height: "50px",
-          },
-        },
-      },
-    },
-  });
+  const [viewOtp, setViewOtp] = useState<boolean>(false);
+
   const validateFields = () => {
     const newErrors = { name: "", email: "", password: "" };
 
@@ -69,9 +63,9 @@ const Signup: React.FC = () => {
     return !Object.values(newErrors).some((error) => error !== "");
   };
 
-  const handleSignup = async () => {
+  const handleOtpGeneration = async () => {
     if (!validateFields()) return;
-    setLoading(true)
+    setLoading(true);
     try {
       const response = await axios.post(
         "https://todo-cloudy.onrender.com/api/auth/createuser",
@@ -83,32 +77,68 @@ const Signup: React.FC = () => {
         }
       );
 
-      if (response.data.authToken) {
-        secureLocalStorage.setItem("authToken", response.data.authToken);
-        toast.success('Signup successful')
-        navigate("/mainpage");
+      if (response.data.message) {
+        setViewOtp(true);
+        toast.info(response.data.message);
         setError(null);
       } else if (response.status === 400 && response.data.error) {
-        await setError(response.data.error)
-        toast.error(`${error}`)
+        await setError(response.data.error);
+        toast.error(error);
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         await setError(err.response.data.error);
-        toast.error(error)
+        toast.error(error);
         console.error(error);
       } else {
         setError("An unexpected error occurred.");
-        toast.error(error)
+        toast.error(error);
       }
-    } finally{
+    } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSignup = async () => {
+    if (!validateFields()) return;
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://todo-cloudy.onrender.com/api/auth/verify-otp-createuser",
+        otpData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.authToken) {
+        secureLocalStorage.setItem("authToken", response.data.authToken);
+        navigate("/mainpage");
+        setError(null);
+      } else if (response.status === 400 && response.data.error) {
+        await setError(response.data.error);
+        toast.error(`${error}`);
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        await setError(err.response.data.error);
+        toast.error(error);
+        console.error(error);
+      } else {
+        setError("An unexpected error occurred.");
+        toast.error(error);
+      }
+    } finally {
+      setLoading(false);
+      setViewOtp(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleSignup();
+    await handleOtpGeneration();
   };
 
   const handleGoogleLogin = () => {
@@ -126,6 +156,23 @@ const Signup: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    setOtpData((prev) => ({ ...prev, email: formData.email }));
+  }, [formData.email]);
+
+  // ...
+
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numbers and max 6 digits
+    if (/^\d{0,6}$/.test(value)) {
+      setOtpData({
+        ...otpData,
+        otp: value,
+      });
+    }
+  };
+
   return (
     <Stack>
       <img alt="nature" className="bg-img" src={image} />
@@ -134,59 +181,97 @@ const Signup: React.FC = () => {
         display={"flex"}
         justifyContent={"center"}
         alignItems={"center"}
-
       >
         <Box className="signup-box">
-          <Typography variant="h4" color={"white"} textAlign={"center"} fontWeight={'bold'} pt={3}>
+          <Typography
+            variant="h4"
+            color={"white"}
+            textAlign={"center"}
+            fontWeight={"bold"}
+            pt={3}
+          >
             Signup
           </Typography>
-          <form onSubmit={handleSubmit} className="m-8">
-          <ThemeProvider theme={theme}>
-            <Box display={'flex'} flexDirection={'column'} gap={2}>
-              <Box>
-                <Typography className="label">Name</Typography>
-                <TextField
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  error={!!errors.name}
-                  helperText={errors.name}
-                  className="input-login Themed TextField"
-                />
+          <form onSubmit={handleSubmit} className="my-1 mx-6">
+          
+              <Box display={"flex"} flexDirection={"column"} gap={2}>
+                <Box>
+                  <Typography className="label">Name</Typography>
+                  <TextField
+                    type="text"
+                    name="name"
+                    id="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    error={!!errors.name}
+                    helperText={errors.name}
+                    className="input-login"
+                  />
+                </Box>
+                <Box>
+                  <Typography className="label">Email</Typography>
+                  <TextField
+                    type="email"
+                    name="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                    className="input-login"
+                  />
+                </Box>
+                {!viewOtp ? (
+                  <Box>
+                    <Typography className="label">Password</Typography>
+                    <TextField
+                      type="password"
+                      name="password"
+                      id="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      error={!!errors.password}
+                      helperText={errors.password}
+                      className="input-login"
+                    />
+                  </Box>
+                ) : (
+                  <Box>
+                    <Typography className="label">OTP</Typography>
+                    <TextField
+                      type="otp"
+                      name="OTP"
+                      id="otp"
+                      value={otpData.otp}
+                      onChange={handleOtpChange}
+                      // error={otpData.otp.length !== 6}
+                      // helperText={
+                      //   otpData.otp.length !== 6
+                      //     ? "Enter a valid 6-digit OTP"
+                      //     : ""
+                      // }
+                      className="input-login"
+                    />
+                  </Box>
+                )}
               </Box>
-              <Box>
-                <Typography className="label">Email</Typography>
-                <TextField
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  error={!!errors.email}
-                  helperText={errors.email}
-                  className="input-login Themed TextField"
-                />
+         
+            {loading ? (
+              <Loader />
+            ) : !viewOtp ? (
+              <Box className="submit-button mt-6">
+                <button type="submit">Generate OTP</button>
               </Box>
-              <Box>
-                <Typography className="label">Password</Typography>
-                <TextField
-                  type="password"
-                  name="password"
-                  id="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  error={!!errors.password}
-                  helperText={errors.password}
-                  className="input-login Themed TextField"
-                />
+            ) : (
+              <Box className="submit-button mt-6">
+                <Button
+                  onClick={handleSignup}
+                  // disabled={otpData.otp.length !== 6}
+                >
+                  Signup
+                </Button>
               </Box>
-            </Box>
-            </ThemeProvider>
-            {loading?<Loader /> : <Box className="submit-button mt-6">
-              <button type="submit">Signup</button>
-            </Box>}
+            )}
             <Box
               display={"flex"}
               flexDirection={"row"}
@@ -198,7 +283,7 @@ const Signup: React.FC = () => {
                 onClick={handleGoogleLogin}
               />
               <SiGithub
-                className="bottom-link text-2xl"
+                className="github-icon text-2xl"
                 onClick={handleGithubLogin}
               />
             </Box>

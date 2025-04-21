@@ -62,8 +62,8 @@
 }
 .submit-button{
     text-align: center;
-    margin-left: 36%;
-    width: 100px;
+    margin-left: 26%;
+    width: 200px;
     font-size: 16px;
     padding: 6px 2px;
     font-weight: 500;
@@ -90,6 +90,12 @@
     font-weight: bolder;
     color: rgb(65, 153, 241);
     cursor: pointer;
+
+}
+.github-icon{
+  font-weight: bolder;
+  color: white;
+  cursor: pointer;
 
 }
 

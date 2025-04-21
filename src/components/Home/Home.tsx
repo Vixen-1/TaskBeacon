@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import image from "../../assets/main-bg.jpg";
 import { Box, Button, Stack } from "@mui/material";
-import "./home.css";
+import "./home.scss"; // Update to use SCSS
 import "../../App.css";
 import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
   const navigate = useNavigate();
+
   return (
-    <Stack position={"relative"} height={"100vh"}>
+    <Stack position={"relative"} height={"100vh"} className="home">
       <Navbar />
       <img alt="nature" className="bg-img" src={image} />
       <Box
@@ -18,17 +19,13 @@ export default function Home() {
         alignItems={"center"}
         className="content"
       >
-        <h1 className="text-content text-5xl md:text-7xl font-bold text-white drop-shadow-lg tracking-widest animate-fadeIn">
+        <h1 className="text-content animate-fadeIn">
           Welcome to INotes
         </h1>
         <Box className="sub-content animate-fadeIn">
-          <Box>
-            Your ultimate solution for managing notes effortlessly on the cloud.
-          </Box>
-          <Box className="text-center">
-            We will keep your notes private and accessible only to you.
-          </Box>
-          <Box className="text-center">To organize Your Thoughts</Box>
+          <div>Your ultimate solution for managing notes effortlessly on the cloud.</div>
+          <div className="text-center">We will keep your notes private and accessible only to you.</div>
+          <div className="text-center">To organize Your Thoughts</div>
         </Box>
         <Box
           display={"flex"}
@@ -57,9 +54,7 @@ export default function Home() {
             </span>
             .
           </Box>
-          <p className="bottom-nav">
-            Join us and take control of your notes today!
-          </p>
+          <p className="bottom-nav">Join us and take control of your notes today!</p>
         </Box>
       </Box>
     </Stack>

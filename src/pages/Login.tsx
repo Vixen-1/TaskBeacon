@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material";
 import "../assets/styles/common.css";
 import { useState } from "react";
 import secureLocalStorage from "react-secure-storage";
@@ -7,8 +6,8 @@ import axios from "axios";
 import image from "../assets/main-bg.jpg";
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import "../App.css";
-// import { FcGoogle } from "react-icons/fc";
-// import { SiGithub } from "react-icons/si";
+import { FcGoogle } from "react-icons/fc";
+import { SiGithub } from "react-icons/si";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 
@@ -34,20 +33,6 @@ const Login = () => {
     });
   };
 
-  const theme = createTheme({
-    components: {
-      MuiTextField: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "rgba(255,255,255, 0.6) ",
-            height: "50px",
-            borderRadius: "8px",
-          },
-        },
-      },
-    },
-  });
-
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
     e.preventDefault();
@@ -64,7 +49,6 @@ const Login = () => {
 
       if (response.data.authToken) {
         secureLocalStorage.setItem("authToken", response.data.authToken);
-        toast.success("Login Successful !")
         setError(null);
         navigate("/mainpage");
       }
@@ -86,13 +70,13 @@ const Login = () => {
     }
   };
 
-  // const handleGoogleLogin = () => {
-  //   window.location.href = "/auth/google";
-  // };
+  const handleGoogleLogin = () => {
+    window.location.href = "api/auth/google";
+  };
 
-  // const handleFacebookLogin = () => {
-  //   window.location.href = "/auth/facebook";
-  // };
+  const handleGithubLogin = () => {
+    window.location.href = "api/auth/github";
+  };
 
   return (
     <Stack className="signup">
@@ -113,11 +97,10 @@ const Login = () => {
           >
             Login
           </Typography>
-          <form onSubmit={handleSubmit} className="form m-10">
-          <ThemeProvider theme={theme}>
+          <form onSubmit={handleSubmit} className="form mx-10 my-6">
             <Box display={'flex'} flexDirection={'column'} gap={2} >
               <Box>
-                <Typography className="label Themed TextField">Email</Typography>
+                <Typography className="label">Email</Typography>
                 <TextField
                   type="email"
                   name="email"
@@ -129,7 +112,7 @@ const Login = () => {
                 />
               </Box>
               <Box>
-                <Typography className="label Themed TextField pt-4">Password</Typography>
+                <Typography className="label pt-4">Password</Typography>
                 <TextField
                   type="password"
                   name="password"
@@ -141,13 +124,12 @@ const Login = () => {
                 />
               </Box>
             </Box>
-            </ThemeProvider>
             {loading? <Box className="pt-5"><Loader /></Box> : <Box className="submit-button mt-10">
               <button type="submit">Login</button>
             </Box>}
           </form>
 
-          {/* <Box
+          <Box
             display={"flex"}
             flexDirection={"row"}
             gap={10}
@@ -157,11 +139,11 @@ const Login = () => {
               className="font-bold cursor-pointer text-2xl"
               onClick={handleGoogleLogin}
             />
-            <SiFacebook
-              className="bottom-link text-2xl"
-              onClick={handleFacebookLogin}
+            <SiGithub
+              className="github-icon text-2xl"
+              onClick={handleGithubLogin}
             />
-          </Box> */}
+          </Box>
 
           <Box className="bottom">
             Don't have an account?{" "}
