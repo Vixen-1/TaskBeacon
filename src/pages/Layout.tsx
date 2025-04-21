@@ -1,9 +1,9 @@
-import Main from "../../pages/Main";
-import Navbar from "../Navbar/Navbar";
-import Notes from "./Notes";
+import Main from "../components/Layout/Main";
+import Navbar from "../components/Navbar/Navbar";
+import Notes from "../components/Layout/Notes";
 import { useCallback, useEffect, useRef, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
-import { useAddNoteMutation, useDeleteNoteMutation, useGetAllDataQuery, useGetUserDataQuery, useUpdateNoteMutation } from "../../redux/ApiSlice";
+import { useAddNoteMutation, useDeleteNoteMutation, useGetAllDataQuery, useGetUserDataQuery, useUpdateNoteMutation } from "../redux/ApiSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 

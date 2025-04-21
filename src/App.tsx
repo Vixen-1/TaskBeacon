@@ -9,7 +9,7 @@ const Home = React.lazy(() => import("./components/Home/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
 const Signup = React.lazy(() => import("./pages/Signup"));
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage"));
-const Layout = React.lazy(() => import("./components/Layout/Layout"));
+const Layout = React.lazy(() => import("./pages/Layout"));
 
 function App() {
   return (

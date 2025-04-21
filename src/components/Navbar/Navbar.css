@@ -1,7 +1,7 @@
 .navbar-data{
     display: flex;
     justify-content: space-between;
-    position: sticky;
+    position: fixed;
     top: 0px;
     z-index: 100;
     display: block;

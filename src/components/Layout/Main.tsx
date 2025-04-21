@@ -1,8 +1,7 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import "../assets/styles/common.css";
+import "../../assets/styles/common.css";
 import { useState } from "react";
-import image from "../assets/ohho.jpg";
-import "../App.css";
+import image from "../../assets/ohho.jpg";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -99,12 +98,10 @@ export default function Main({
   };
   return (
     <Stack className="relative block h-screen w-screen overflow-hidden">
-      {/* Background Image */}
       <Box className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50 z-0">
         <img alt="nature" className="w-full h-full object-cover" src={image} />
       </Box>
 
-      {/* Main Content */}
       <Box className="relative z-10 flex flex-col items-center justify-center h-full text-center">
         {userData && userData?.name ? (
           <Box
@@ -153,7 +150,7 @@ export default function Main({
                 marginTop: "40px",
                 transition: "transform 0.3s, box-shadow 0.3s",
                 "&:hover": {
-                  transform: "scale(1.05)",
+                  transform: "scale(1.01)",
                   boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.3)",
                 },
               }}

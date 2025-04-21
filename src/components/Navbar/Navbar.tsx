@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
-// import secureLocalStorage from "react-secure-storage";
-
 export default function Navbar({ buttonName, handleLogout }: { buttonName?: string, handleLogout?: ()=> void }) {
   const navigate = useNavigate();
 
