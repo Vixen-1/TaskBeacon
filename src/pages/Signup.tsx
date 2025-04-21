@@ -11,8 +11,8 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-// import { FcGoogle } from "react-icons/fc";
-// import { SiFacebook } from "react-icons/si";
+import { FcGoogle } from "react-icons/fc";
+import { SiGithub } from "react-icons/si";
 import image from "../assets/main-bg.jpg";
 import Loader from "../components/Loader";
 
@@ -137,13 +137,13 @@ const Signup: React.FC = () => {
     await handleSignup();
   };
 
-  // const handleGoogleLogin = () => {
-  //   window.location.href = "/auth/google";
-  // };
+  const handleGoogleLogin = () => {
+    window.location.href = "https://todo-cloudy.onrender.com/api/auth/google";
+  };
 
-  // const handleFacebookLogin = () => {
-  //   window.location.href = "/auth/facebook";
-  // };
+  const handleGithubLogin = () => {
+    window.location.href = "https://todo-cloudy.onrender.com/api/auth/github";
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -213,7 +213,7 @@ const Signup: React.FC = () => {
             {loading?<Loader /> : <Box className="submit-button mt-6">
               <button type="submit">Signup</button>
             </Box>}
-            {/* <Box
+            <Box
               display={"flex"}
               flexDirection={"row"}
               gap={10}
@@ -223,11 +223,11 @@ const Signup: React.FC = () => {
                 className="font-bold cursor-pointer text-2xl"
                 onClick={handleGoogleLogin}
               />
-              <SiFacebook
+              <SiGithub
                 className="bottom-link text-2xl"
-                onClick={handleFacebookLogin}
+                onClick={handleGithubLogin}
               />
-            </Box> */}
+            </Box>
             <Box className="bottom">
               Already have an account?{" "}
               <span className="bottom-link" onClick={() => navigate("/login")}>

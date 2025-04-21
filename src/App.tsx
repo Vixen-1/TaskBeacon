@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 
 function App() {
   return (
-    <BrowserRouter basename="inotes-frontend">
+    <BrowserRouter basename="inotes">
       <Provider store={store}>
       <div className="App">
         <Routes>
