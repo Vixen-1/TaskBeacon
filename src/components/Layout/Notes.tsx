@@ -3,7 +3,6 @@ import { Box, Button, Typography, Grid } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faFloppyDisk, faTrash } from "@fortawesome/free-solid-svg-icons";
 import secureLocalStorage from "react-secure-storage";
-import image2 from "../../assets/image.jpg";
 
 interface Note {
   _id: string;
