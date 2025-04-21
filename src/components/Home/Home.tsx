@@ -25,12 +25,10 @@ export default function Home() {
           <Box>
             Your ultimate solution for managing notes effortlessly on the cloud.
           </Box>
-          <Box className='text-center'>
+          <Box className="text-center">
             We will keep your notes private and accessible only to you.
           </Box>
-          <Box className='text-center'>
-            To organize Your Thoughts
-          </Box>
+          <Box className="text-center">To organize Your Thoughts</Box>
         </Box>
         <Box
           display={"flex"}

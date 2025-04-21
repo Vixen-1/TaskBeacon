@@ -8,9 +8,9 @@ import image from "../assets/main-bg.jpg";
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import "../App.css";
 // import { FcGoogle } from "react-icons/fc";
-// import { SiFacebook } from "react-icons/si";
-import { Snackbar, Alert } from "@mui/material";
+// import { SiGithub } from "react-icons/si";
 import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 
 interface LoginFormData {
   email: string;
@@ -45,32 +45,8 @@ const Login = () => {
           },
         },
       },
-      // MuiOutlinedInput: {
-      //   styleOverrides: {
-      //     root: {
-      //       "& fieldset": {
-      //         borderColor: "green",
-      //       },
-      //       "&:hover fieldset": {
-      //         borderColor: "blue",
-      //       },
-      //       "&.Mui-focused fieldset": {
-      //         borderColor: "red",
-      //       },
-      //     },
-      //   },
-      // },
     },
   });
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "success" as "success" | "error" | "info" | "warning",
-  });
-
-  const handleSnackbarClose = () => {
-    setSnackbar((prev) => ({ ...prev, open: false }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
@@ -88,39 +64,22 @@ const Login = () => {
 
       if (response.data.authToken) {
         secureLocalStorage.setItem("authToken", response.data.authToken);
-        setSnackbar({
-          open: true,
-          message: `Login Successful`,
-          severity: "success",
-        });
+        toast.success("Login Successful !")
         setError(null);
         navigate("/mainpage");
       }
       if (response.data.error) {
         await setError(response.data.error);
-        setSnackbar({
-          open: true,
-          message: `${error}`,
-          severity: "error",
-        });
-        // navigate("/errorpage");
+        toast.error(error)
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         await setError(err.response.data.error);
-        setSnackbar({
-          open: true,
-          message: `${error}`,
-          severity: "error",
-        });
-        console.log(error);
+        toast.error(error)
+        console.error(error);
       } else {
         setError("An unexpected error occurred.");
-        setSnackbar({
-          open: true,
-          message: `${error}`,
-          severity: "error",
-        });
+        toast.error(error)
       }
     }finally{
       setLoading(false);
@@ -213,16 +172,6 @@ const Login = () => {
           </Box>
         </Box>
       </Box>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </Stack>
   );
 };

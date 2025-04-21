@@ -35,8 +35,6 @@ export default function Notes({
   handleDeleteNote: (id: string) => void;
 }) {
   const token = secureLocalStorage.getItem("authToken");
-
-  // Track which note is being edited
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,20 +43,17 @@ export default function Notes({
 
   const formatDateAndTime = (isoString: string) => {
     const dateObj = new Date(isoString);
-
-    // Format date as dd-mm-yyyy
     const date = dateObj.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     });
 
-    // Format time as hh:mm:ss
     const time = dateObj.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-      hour12: false, // 24-hour format
+      hour12: false,
     });
 
     return { date, time };

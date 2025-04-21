@@ -3,9 +3,9 @@ import Navbar from "../Navbar/Navbar";
 import Notes from "./Notes";
 import { useCallback, useEffect, useRef, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
-import { Snackbar, Alert } from "@mui/material";
 import { useAddNoteMutation, useDeleteNoteMutation, useGetAllDataQuery, useGetUserDataQuery, useUpdateNoteMutation } from "../../redux/ApiSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface Note {
   _id: string;
@@ -26,8 +26,6 @@ export default function Layout() {
   const scrollToNotes = () => {
     notesRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
-  // const [edit, setEdit] = useState<boolean>(false);
   const [notes, setNotes] = useState<Note[]>([]);
 
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -40,16 +38,6 @@ export default function Layout() {
     date: "",
   });
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "success" as "success" | "error" | "info" | "warning",
-  });
-
-  const handleSnackbarClose = () => {
-    setSnackbar((prev) => ({ ...prev, open: false }));
-  };
-
   const navigate = useNavigate();
   
   const token = secureLocalStorage.getItem("authToken");
@@ -59,27 +47,18 @@ export default function Layout() {
   const {data: apiResponse=[], error, refetch} = useGetAllDataQuery({});
 
   useEffect(()=>{
-    // refetchUserData();
     if (userResponse) setUserData(userResponse);
     if (userError) navigate("/errorpage");
     if(apiResponse && userData !== null)
       setNotes(apiResponse)
     if(error)
-      setSnackbar({
-        open: true,
-        message: "Error fetching notes",
-        severity: "error",
-      });
+      toast.error("Error in fetching notes!")
   }, [apiResponse, error, navigate, refetchUserData, userData, userError, userResponse])
 
   const [AddNoteMutation] = useAddNoteMutation();
   const handleAddNote = async () => {
     if (!currentNote.title || !currentNote.description || !currentNote.tag) {
-      setSnackbar({
-        open: true,
-        message: "Please fill in all fields",
-        severity: "warning",
-      });
+      toast.info("Please enter required fields.")
       return;
     }
 
@@ -90,17 +69,9 @@ export default function Layout() {
       })
       setCurrentNote({ _id: "", title: "", description: "", tag: "", date: "" });
       refetch();
-      setSnackbar({
-        open: true,
-        message: "Note added successfully!",
-        severity: "success",
-      });
+      toast.success("Notes added successfully!")
     } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Error adding note",
-        severity: "error",
-      });
+      toast.error("Error in adding notes")
       console.error("Error adding note:", error);
     }
   };
@@ -113,19 +84,10 @@ export default function Layout() {
         data: note,
         headers: { authorization: `Bearer ${token}` },
       });
-      setSnackbar({
-        open: true,
-        message: "Note updated successfully!",
-        severity: "success",
-      });
-      // setEdit(false);
+      toast.success("Note updated successfully")
       refetch();
     } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Error saving note",
-        severity: "error",
-      });
+      toast.error("Error saving note")
       console.error("Error saving note:", error);
     }
   };
@@ -138,17 +100,9 @@ export default function Layout() {
         headers: { authorization: `Bearer ${token}` },
       })
       refetch();
-      setSnackbar({
-        open: true,
-        message: "Note deleted successfully!",
-        severity: "success",
-      });
+      toast.success("Note deleted successfully!")
     } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Error deleting note",
-        severity: "error",
-      });
+      toast.error("Error deleting note")
       console.error("Error deleting note:", error);
     }
   };
@@ -182,21 +136,9 @@ export default function Layout() {
             fetchNotes={fetchNotes}
             handleSaveEdit={handleSaveEdit}
             handleDeleteNote={handleDeleteNote}
-            // edit={edit}
-            // setEdit={setEdit}
           />
         </div>
       )}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }

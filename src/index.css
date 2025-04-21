@@ -16,3 +16,19 @@ body{
 /* background: rgb(38, 37, 37); */
 position: relative;
 }
+
+/* src/toastStyles.css */
+.Toastify__toast {
+  border-radius: 8px;
+  font-family: "Roboto", sans-serif; /* Match your app's font */
+}
+
+.Toastify__toast--success {
+  background-color: #4caf50; /* Green for success */
+  color: white;
+}
+
+.Toastify__toast--error {
+  background-color: #f44336; /* Red for error */
+  color: white;
+}
