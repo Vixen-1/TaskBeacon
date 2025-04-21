@@ -3,7 +3,13 @@ import Navbar from "../components/Navbar/Navbar";
 import Notes from "../components/Layout/Notes";
 import { useCallback, useEffect, useRef, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
-import { useAddNoteMutation, useDeleteNoteMutation, useGetAllDataQuery, useGetUserDataQuery, useUpdateNoteMutation } from "../redux/ApiSlice";
+import {
+  useAddNoteMutation,
+  useDeleteNoteMutation,
+  useGetAllDataQuery,
+  useGetUserDataQuery,
+  useUpdateNoteMutation,
+} from "../redux/ApiSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -12,6 +18,8 @@ interface Note {
   title: string;
   description: string;
   tag: string;
+  notification: boolean;
+  sendDate: string | null;
   date: string;
 }
 
@@ -35,43 +43,51 @@ export default function Layout() {
     title: "",
     description: "",
     tag: "",
+    notification: false, 
+    sendDate: null,
     date: "",
   });
 
   const navigate = useNavigate();
-  
+
   const token = secureLocalStorage.getItem("authToken");
 
-  const { data: userResponse, error:userError, refetch: refetchUserData } = useGetUserDataQuery({});
+  const { data: userResponse, error: userError, refetch: refetchUserData } = useGetUserDataQuery({});
 
-  const {data: apiResponse=[], error, refetch} = useGetAllDataQuery({});
+  const { data: apiResponse = [], error, refetch } = useGetAllDataQuery({});
 
-  useEffect(()=>{
+  useEffect(() => {
     if (userResponse) setUserData(userResponse);
     if (userError) navigate("/errorpage");
-    if(apiResponse && userData !== null)
-      setNotes(apiResponse)
-    if(error)
-      toast.error("Error in fetching notes!")
-  }, [apiResponse, error, navigate, refetchUserData, userData, userError, userResponse])
+    if (apiResponse && userData !== null) setNotes(apiResponse);
+    if (error) toast.error("Error in fetching notes!");
+  }, [apiResponse, error, navigate, refetchUserData, userData, userError, userResponse]);
 
-  const [AddNoteMutation] = useAddNoteMutation();
+  const [addNoteMutation] = useAddNoteMutation();
   const handleAddNote = async () => {
     if (!currentNote.title || !currentNote.description || !currentNote.tag) {
-      toast.info("Please enter required fields.")
+      toast.info("Please enter required fields.");
       return;
     }
 
     try {
-      await AddNoteMutation({
+      await addNoteMutation({
         ...currentNote,
         headers: { authorization: `Bearer ${token}` },
-      })
-      setCurrentNote({ _id: "", title: "", description: "", tag: "", date: "" });
+      });
+      setCurrentNote({
+        _id: "",
+        title: "",
+        description: "",
+        tag: "",
+        notification: false,
+        sendDate: null,
+        date: "",
+      });
       refetch();
-      toast.success("Notes added successfully!")
+      toast.success("Notes added successfully!");
     } catch (error) {
-      toast.error("Error in adding notes")
+      toast.error("Error in adding notes");
       console.error("Error adding note:", error);
     }
   };
@@ -84,10 +100,10 @@ export default function Layout() {
         data: note,
         headers: { authorization: `Bearer ${token}` },
       });
-      toast.success("Note updated successfully")
+      toast.success("Note updated successfully");
       refetch();
     } catch (error) {
-      toast.error("Error saving note")
+      toast.error("Error saving note");
       console.error("Error saving note:", error);
     }
   };
@@ -98,16 +114,16 @@ export default function Layout() {
       await deleteNote({
         id: _id,
         headers: { authorization: `Bearer ${token}` },
-      })
+      });
       refetch();
-      toast.success("Note deleted successfully!")
+      toast.success("Note deleted successfully!");
     } catch (error) {
-      toast.error("Error deleting note")
+      toast.error("Error deleting note");
       console.error("Error deleting note:", error);
     }
   };
   const fetchNotes = useCallback(() => {
-    refetch()
+    refetch();
   }, [refetch]);
 
   const handleLogout = () => {
@@ -115,7 +131,7 @@ export default function Layout() {
     setUserData(null);
     navigate("/");
   };
-  
+
   return (
     <div>
       <Navbar buttonName="Logout" handleLogout={handleLogout} />

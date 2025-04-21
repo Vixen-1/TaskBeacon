@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
-  Grid,
-} from "@mui/material";
+import { Box, Button, Typography, Grid } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faFloppyDisk, faTrash } from "@fortawesome/free-solid-svg-icons";
 import secureLocalStorage from "react-secure-storage";
@@ -18,6 +10,8 @@ interface Note {
   title: string;
   description: string;
   tag: string;
+  notification: boolean;
+  sendDate: string | null;
   date: string;
 }
 
@@ -61,134 +55,124 @@ export default function Notes({
 
   return (
     <Box
-      sx={{
-        position: "relative",
-        minHeight: "100vh",
-        overflow: "hidden",
-        backgroundImage: `url(${image2})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        "::before": {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          zIndex: 0,
-        },
-      }}
+      className="notes-background"
     >
       <Box
         sx={{
           position: "relative",
           zIndex: 1,
-          maxWidth: "1200px",
+          maxWidth: "1200px", // Fixed max width for consistency
           margin: "0 auto",
           padding: "20px",
+          width: "100%", // Ensure full width of container
         }}
       >
-        <Grid container marginTop={"40px"} spacing={3}>
+        <Grid container spacing={2} sx={{ marginTop: "50px", width: "100%" }}>
           {notes.map((note) => (
-            <Grid item xs={12} sm={6} md={4} key={note._id}>
-              <Card
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              key={note._id}
+              sx={{
+                flexGrow: 0, // Prevent stretching
+                maxWidth: "100%", // Ensure max width respects grid
+                boxSizing: "border-box", // Account for padding and borders
+              }}
+            >
+              <Box
+                display="flex"
+                flexDirection="column"
+                gap={1}
+                boxShadow={1}
                 sx={{
-                  height: "220px",
-                  display: "flex",
-                  marginBottom: "20px",
-                  marginRight: "8px",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  backgroundColor: "rgba(208, 207, 208, 0.8)",
-                  borderRadius: "10px",
-                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-                  transition: "transform 0.3s, box-shadow 0.3s",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                    boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.3)",
-                  },
+                  background: "#fff",
+                  padding: 3,
+                  borderRadius: 2,
+                  width: "100%", // Ensure consistent width
+                  minWidth: 0, // Allow shrinking to fit content
                 }}
               >
-                <CardContent>
-                  <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
-                    <Typography
-                      variant="caption"
-                      color="primary"
-                      sx={{ marginTop: "16px", display: "block" }}
-                      contentEditable={editingNoteId === note._id}
-                      suppressContentEditableWarning
-                      onBlur={(e) =>
-                        setNotes((prevNotes: Note[]) => {
-                          return prevNotes.map((prevNote) =>
-                            prevNote._id === note._id
-                              ? { ...prevNote, tag: e.target.textContent || "" }
-                              : prevNote
-                          );
-                        })
-                      }
-                    >
-                      #{note.tag}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      color="textSecondary"
-                      sx={{ marginTop: "16px", display: "block" }}
-                    >
-                      {`Date: ${formatDateAndTime(note.date).date} Time: ${formatDateAndTime(note.date).time} `}
-                    </Typography>
-                  </Box>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                >
                   <Typography
-                    fontWeight="bold"
-                    variant="h5"
-                    marginY={2}
-                    className="capitalize"
-                    gutterBottom
+                    variant="caption"
+                    color="primary"
+                    sx={{ marginTop: "16px", display: "block" }}
                     contentEditable={editingNoteId === note._id}
                     suppressContentEditableWarning
                     onBlur={(e) =>
-                      setNotes((prevNotes) => {
-                        return prevNotes.map((prevNote) =>
+                      setNotes((prevNotes: Note[]) =>
+                        prevNotes.map((prevNote) =>
                           prevNote._id === note._id
-                            ? { ...prevNote, title: e.target.textContent || "" }
+                            ? { ...prevNote, tag: e.target.textContent || "" }
                             : prevNote
-                        );
-                      })
+                        )
+                      )
                     }
                   >
-                    {note.title}
+                    #{note.tag}
                   </Typography>
                   <Typography
-                    variant="body2"
+                    variant="caption"
                     color="textSecondary"
-                    sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: "vertical",
-                    }}
-                    contentEditable={editingNoteId === note._id}
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      setNotes((prevNotes) => {
-                        return prevNotes.map((prevNote) =>
-                          prevNote._id === note._id
-                            ? { ...prevNote, description: e.target.textContent || "" }
-                            : prevNote
-                        );
-                      })
-                    }
+                    sx={{ marginTop: "16px", display: "block" }}
                   >
-                    {note.description}
+                    {`Date: ${formatDateAndTime(note.date).date} Time: ${formatDateAndTime(note.date).time}`}
                   </Typography>
-                </CardContent>
-                <CardActions
+                </Box>
+                <Typography
+                  fontWeight="bold"
+                  variant="h5"
+                  marginY={2}
+                  className="capitalize"
+                  gutterBottom
+                  contentEditable={editingNoteId === note._id}
+                  suppressContentEditableWarning
+                  onBlur={(e) =>
+                    setNotes((prevNotes) =>
+                      prevNotes.map((prevNote) =>
+                        prevNote._id === note._id
+                          ? { ...prevNote, title: e.target.textContent || "" }
+                          : prevNote
+                      )
+                    )
+                  }
+                >
+                  {note.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
                   sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
                   }}
+                  contentEditable={editingNoteId === note._id}
+                  suppressContentEditableWarning
+                  onBlur={(e) =>
+                    setNotes((prevNotes) =>
+                      prevNotes.map((prevNote) =>
+                        prevNote._id === note._id
+                          ? { ...prevNote, description: e.target.textContent || "" }
+                          : prevNote
+                      )
+                    )
+                  }
+                >
+                  {note.description}
+                </Typography>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
                 >
                   {editingNoteId !== note._id ? (
                     <Button
@@ -220,8 +204,8 @@ export default function Notes({
                   >
                     Delete
                   </Button>
-                </CardActions>
-              </Card>
+                </Box>
+              </Box>
             </Grid>
           ))}
         </Grid>

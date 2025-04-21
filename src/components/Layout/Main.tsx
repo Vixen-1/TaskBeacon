@@ -1,13 +1,12 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import "../../assets/styles/common.css";
-import './Layout.scss'
+import "./Layout.scss";
 import { useState } from "react";
 import image from "../../assets/ohho.jpg";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../Loader";
-// import { useGetUserDataQuery } from "../redux/ApiSlice";
 
 interface UserData {
   _id: string;
@@ -20,6 +19,8 @@ interface Note {
   title: string;
   description: string;
   tag: string;
+  notification: boolean;
+  sendDate: string | null;
   date: string;
 }
 
