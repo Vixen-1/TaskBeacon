@@ -132,7 +132,7 @@ export default function Main({
                     fullWidth
                     value={currentNote.title}
                     onChange={(e) => setCurrentNote({ ...currentNote, title: e.target.value })}
-                    className="text-field input"
+                    className="text-field"
                     error={errors.title}
                     helperText={errorsHelperText.title}
                   />
@@ -142,7 +142,7 @@ export default function Main({
                     Description
                   </Typography>
                   <TextField
-                    className="text-field input-desc"
+                    className="text-field"
                     variant="outlined"
                     multiline
                     rows={4}
@@ -164,7 +164,7 @@ export default function Main({
                     value={currentNote.tag}
                     onChange={(e) => setCurrentNote({ ...currentNote, tag: e.target.value })}
                     margin="normal"
-                    className="text-field input"
+                    className="text-field"
                   />
                 </Box>
                 <Box className="flex-center">

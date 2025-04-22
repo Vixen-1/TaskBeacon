@@ -1,6 +1,6 @@
 // Variables for reusability
 $background-opacity: 0.6;
-$shadow-light: 0px 4px 10px rgba(0, 0, 0, 0.2);
+$shadow-light: 0px 0px 10px rgba(0, 0, 0, 1);
 $shadow-hover: 0px 8px 15px rgba(0, 0, 0, 0.3);
 $transition-duration: 0.5s;
 $primary-color: #1976d2;
@@ -116,7 +116,7 @@ $primary-color: #1976d2;
         border-radius: 0.625rem;
         background-color: rgba(255, 255, 255, 0.5);
         box-shadow: $shadow-light;
-        margin-top: 2.5rem;
+        margin-top: 4rem;
         transition: transform $transition-duration, box-shadow $transition-duration;
 
         &:hover {

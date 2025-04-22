@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography, Grid } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faFloppyDisk, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Box, Typography, Grid, IconButton } from "@mui/material";
 import secureLocalStorage from "react-secure-storage";
-
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import SaveIcon from "@mui/icons-material/Save";
+import NotificationAddIcon from "@mui/icons-material/NotificationAdd";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import Notification from "./Notification";
 interface Note {
   _id: string;
   title: string;
@@ -19,17 +24,23 @@ export default function Notes({
   setNotes,
   fetchNotes,
   handleSaveEdit,
+  onAddClick,
   handleDeleteNote,
 }: {
   notes: Note[];
   setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
   fetchNotes: () => void;
+  onAddClick: () => void;
   handleSaveEdit: (note: Note) => void;
   handleDeleteNote: (id: string) => void;
 }) {
   const token = secureLocalStorage.getItem("authToken");
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
-
+  const [activeId, setActiveId] = useState<string>("");
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const toggleDialog = () => {
+    setOpenDialog((prev) => !prev);
+  };
   useEffect(() => {
     if (token) fetchNotes();
   }, [fetchNotes, token]);
@@ -53,20 +64,15 @@ export default function Notes({
   };
 
   return (
-    <Box
-      className="notes-background"
-    >
+    <Box className="notes-background">
       <Box
         sx={{
           position: "relative",
           zIndex: 1,
-          maxWidth: "1200px", // Fixed max width for consistency
-          margin: "0 auto",
-          padding: "20px",
-          width: "100%", // Ensure full width of container
+          width: "100%",
         }}
       >
-        <Grid container spacing={2} sx={{ marginTop: "50px", width: "100%" }}>
+        <Grid container spacing={2} sx={{ marginTop: "25px", width: "100%" }}>
           {notes.map((note) => (
             <Grid
               item
@@ -75,9 +81,9 @@ export default function Notes({
               md={4}
               key={note._id}
               sx={{
-                flexGrow: 0, // Prevent stretching
-                maxWidth: "100%", // Ensure max width respects grid
-                boxSizing: "border-box", // Account for padding and borders
+                flexGrow: 0,
+                maxWidth: "100%",
+                boxSizing: "border-box",
               }}
             >
               <Box
@@ -87,12 +93,48 @@ export default function Notes({
                 boxShadow={1}
                 sx={{
                   background: "#fff",
-                  padding: 3,
-                  borderRadius: 2,
-                  width: "100%", // Ensure consistent width
-                  minWidth: 0, // Allow shrinking to fit content
+                  padding: 1.4,
+                  borderRadius: 4,
+                  width: "100%",
+                  minWidth: 0,
                 }}
               >
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems={"center"}
+                >
+                  {note.notification ? (
+                    <IconButton size={"small"} color="secondary" title="You will be notified one day before deadline">
+                      <NotificationsActiveIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      size={"small"}
+                      color="secondary"
+                      onClick={() => {
+                        setActiveId(note._id);
+                        toggleDialog();
+                      }}
+                    >
+                      <NotificationAddIcon />
+                    </IconButton>
+                  )}
+                  {!note.sendDate ? (
+                    <Typography variant="caption" color="secondary">
+                      <KeyboardDoubleArrowLeftIcon />
+                      Set Notification Alert
+                    </Typography>
+                  ) : (
+                    <Typography
+                      variant="caption"
+                      color="error"
+                    >{`Deadline: ${
+                      formatDateAndTime(note.sendDate).date
+                    } ${formatDateAndTime(note.sendDate).time} `}</Typography>
+                  )}
+                </Box>
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -101,7 +143,6 @@ export default function Notes({
                   <Typography
                     variant="caption"
                     color="primary"
-                    sx={{ marginTop: "16px", display: "block" }}
                     contentEditable={editingNoteId === note._id}
                     suppressContentEditableWarning
                     onBlur={(e) =>
@@ -116,18 +157,16 @@ export default function Notes({
                   >
                     #{note.tag}
                   </Typography>
-                  <Typography
-                    variant="caption"
-                    color="textSecondary"
-                    sx={{ marginTop: "16px", display: "block" }}
-                  >
-                    {`Date: ${formatDateAndTime(note.date).date} Time: ${formatDateAndTime(note.date).time}`}
+                  <Typography variant="caption" color="textSecondary">
+                    {`Date: ${formatDateAndTime(note.date).date} Time: ${
+                      formatDateAndTime(note.date).time
+                    }`}
                   </Typography>
                 </Box>
                 <Typography
                   fontWeight="bold"
                   variant="h5"
-                  marginY={2}
+                  marginY={1}
                   className="capitalize"
                   gutterBottom
                   contentEditable={editingNoteId === note._id}
@@ -160,7 +199,10 @@ export default function Notes({
                     setNotes((prevNotes) =>
                       prevNotes.map((prevNote) =>
                         prevNote._id === note._id
-                          ? { ...prevNote, description: e.target.textContent || "" }
+                          ? {
+                              ...prevNote,
+                              description: e.target.textContent || "",
+                            }
                           : prevNote
                       )
                     )
@@ -169,46 +211,59 @@ export default function Notes({
                   {note.description}
                 </Typography>
                 <Box
+                  mt={1.5}
                   display="flex"
                   flexDirection="row"
                   justifyContent="space-between"
                 >
                   {editingNoteId !== note._id ? (
-                    <Button
+                    <IconButton
+                      title="Edit Note"
                       size="small"
                       color="primary"
-                      startIcon={<FontAwesomeIcon icon={faEdit} />}
                       onClick={() => setEditingNoteId(note._id)}
                     >
-                      Edit
-                    </Button>
+                      <BorderColorIcon />
+                    </IconButton>
                   ) : (
-                    <Button
+                    <IconButton
+                      title="save note"
                       size="small"
-                      color="primary"
-                      startIcon={<FontAwesomeIcon icon={faFloppyDisk} />}
+                      color="secondary"
                       onClick={() => {
                         handleSaveEdit(note);
                         setEditingNoteId(null);
                       }}
                     >
-                      Save
-                    </Button>
+                      <SaveIcon />
+                    </IconButton>
                   )}
-                  <Button
+                  <IconButton
+                    title="delete the note"
                     size="small"
                     color="error"
-                    startIcon={<FontAwesomeIcon icon={faTrash} />}
                     onClick={() => handleDeleteNote(note._id)}
                   >
-                    Delete
-                  </Button>
+                    <DeleteOutlineIcon />
+                  </IconButton>
                 </Box>
               </Box>
             </Grid>
           ))}
         </Grid>
+        <IconButton
+          color="primary"
+          size="large"
+          onClick={onAddClick}
+          sx={{ fontSize: "48px" }}
+        >
+          <AddBoxIcon />
+        </IconButton>
       </Box>
+      {openDialog && (
+        <Notification open={openDialog} refetch=
+        {fetchNotes} toggleDialog={toggleDialog} id={activeId} />
+      )}
     </Box>
   );
 }

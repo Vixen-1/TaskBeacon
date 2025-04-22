@@ -44,6 +44,13 @@ export const TodoApi = createApi({
         method: 'DELETE',
       }),
     }),
+    getNotification: builder.mutation({
+      query: ({payload}) => ({
+        url: `/notes/getNotification`,
+        method: 'POST',
+        body: payload
+      }),
+    }),
     
   }),
 });
@@ -54,4 +61,5 @@ export const {
   useAddNoteMutation,
   useUpdateNoteMutation,
   useDeleteNoteMutation,
+  useGetNotificationMutation
 } = TodoApi;

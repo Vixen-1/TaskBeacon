@@ -34,6 +34,10 @@ export default function Layout() {
   const scrollToNotes = () => {
     notesRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  const addRef = useRef<HTMLDivElement>(null);
+  const scrollToAdd = () => {
+    addRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   const [notes, setNotes] = useState<Note[]>([]);
 
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -85,6 +89,7 @@ export default function Layout() {
         date: "",
       });
       refetch();
+      scrollToNotes();
       toast.success("Notes added successfully!");
     } catch (error) {
       toast.error("Error in adding notes");
@@ -135,6 +140,7 @@ export default function Layout() {
   return (
     <div>
       <Navbar buttonName="Logout" handleLogout={handleLogout} />
+      <div ref={addRef}>
       <Main
         notes={notes}
         userData={userData}
@@ -144,9 +150,11 @@ export default function Layout() {
         setCurrentNote={setCurrentNote}
         handleAddNote={handleAddNote}
       />
+      </div>
       {(notes && notes.length > 0) && (
         <div ref={notesRef}>
           <Notes
+            onAddClick={scrollToAdd}
             notes={notes}
             setNotes={setNotes}
             fetchNotes={fetchNotes}
