@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import "../assets/styles/common.css";
 import { useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 import image from "../assets/main-bg.jpg";
 import { Box, Stack, TextField, Typography } from "@mui/material";
-import "../App.css";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
 import Loader from "../components/Loader";

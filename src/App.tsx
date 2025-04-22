@@ -3,8 +3,9 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import React, { Suspense } from "react";
 import Loader from "./components/Loader";
-
-// Lazy-loaded components
+import "./assets/styles/common.css";
+import "./App.css";
+ 
 const Home = React.lazy(() => import("./components/Home/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
 const Signup = React.lazy(() => import("./pages/Signup"));
