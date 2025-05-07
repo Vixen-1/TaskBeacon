@@ -8,6 +8,8 @@ import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
+import { slideIn } from "../utils/motion";
 
 interface LoginFormData {
   email: string;
@@ -79,7 +81,9 @@ const Login = () => {
   return (
     <Stack className="signup">
       <img alt="nature" className="bg-img" src={image} />
-      <Box
+     <motion.div initial="hidden"
+    animate="show" variants={slideIn('left', "tween", 0.1, 1)}>
+     <Box
         minHeight={"100vh"}
         display={"flex"}
         justifyContent={"center"}
@@ -152,6 +156,7 @@ const Login = () => {
           </Box>
         </Box>
       </Box>
+     </motion.div>
     </Stack>
   );
 };

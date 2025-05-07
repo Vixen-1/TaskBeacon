@@ -4,6 +4,8 @@ import { Box, Button, Stack } from "@mui/material";
 import "./home.scss"; // Update to use SCSS
 import "../../App.css";
 import Navbar from "../Navbar/Navbar";
+import { motion } from "framer-motion";
+import { slideIn, zoomIn } from "../../utils/motion";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -19,14 +21,28 @@ export default function Home() {
         alignItems={"center"}
         className="content"
       >
-        <h1 className="text-content animate-fadeIn">
+        <motion.h1
+          initial="hidden"
+          animate="show"
+          variants={slideIn("up", "tween", 0.75, 1)}
+          className="text-content"
+        >
           Welcome to INotes
-        </h1>
-        <Box className="sub-content animate-fadeIn">
-          <div>Your ultimate solution for managing notes effortlessly on the cloud.</div>
-          <div className="text-center">We will keep your notes private and accessible only to you.</div>
+        </motion.h1>
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={zoomIn(1, 1)}
+          className="sub-content"
+        >
+          <div>
+            Your ultimate solution for managing notes effortlessly on the cloud.
+          </div>
+          <div className="text-center">
+            We will keep your notes private and accessible only to you.
+          </div>
           <div className="text-center">To organize Your Thoughts</div>
-        </Box>
+        </motion.div>
         <Box
           display={"flex"}
           flexDirection={"column"}
@@ -43,7 +59,12 @@ export default function Home() {
           >
             Get Started
           </Button>
-          <Box className="bottom-nav">
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={zoomIn(1, 1)}
+            className="bottom-nav"
+          >
             To continue, please{" "}
             <span className="login-signup" onClick={() => navigate("/login")}>
               Log In
@@ -53,8 +74,10 @@ export default function Home() {
               Sign Up
             </span>
             .
-          </Box>
-          <p className="bottom-nav">Join us and take control of your notes today!</p>
+          </motion.div>
+          <p className="bottom-nav">
+            Join us and take control of your notes today!
+          </p>
         </Box>
       </Box>
     </Stack>

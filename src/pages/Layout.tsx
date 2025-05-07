@@ -1,5 +1,4 @@
 import Main from "../components/Layout/Main";
-import Navbar from "../components/Navbar/Navbar";
 import Notes from "../components/Layout/Notes";
 import { useCallback, useEffect, useRef, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
@@ -12,6 +11,8 @@ import {
 } from "../redux/ApiSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { IconButton } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface Note {
   _id: string;
@@ -39,25 +40,20 @@ export default function Layout() {
     addRef.current?.scrollIntoView({ behavior: "smooth" });
   };
   const [notes, setNotes] = useState<Note[]>([]);
-
   const [userData, setUserData] = useState<UserData | null>(null);
-
   const [currentNote, setCurrentNote] = useState<Note>({
     _id: "",
     title: "",
     description: "",
     tag: "",
-    notification: false, 
+    notification: false,
     sendDate: null,
     date: "",
   });
 
   const navigate = useNavigate();
-
   const token = secureLocalStorage.getItem("authToken");
-
   const { data: userResponse, error: userError, refetch: refetchUserData } = useGetUserDataQuery({});
-
   const { data: apiResponse = [], error, refetch } = useGetAllDataQuery({});
 
   useEffect(() => {
@@ -127,6 +123,7 @@ export default function Layout() {
       console.error("Error deleting note:", error);
     }
   };
+
   const fetchNotes = useCallback(() => {
     refetch();
   }, [refetch]);
@@ -138,20 +135,43 @@ export default function Layout() {
   };
 
   return (
-    <div>
-      <Navbar buttonName="Logout" handleLogout={handleLogout} />
+    <div className="relative min-h-screen bg-gradient-to-br from-green-100 via-blue-100 to-purple-100">
+      <IconButton
+        className="logout-button"
+        onClick={handleLogout}
+        title="Logout"
+        sx={{
+          position: "fixed",
+          top: "16px",
+          right: "16px",
+          zIndex: 50,
+          color: "#D8B4FE", // purple-200
+          padding: "8px",
+          "&:hover": {
+            color: "#BBF7D0", // green-200
+            transform: "scale(1.2)",
+            background: "transparent",
+          },
+          "&:active": {
+            transform: "scale(1)",
+          },
+          background: "transparent",
+        }}
+      >
+        <LogoutIcon sx={{ fontSize: "1.5rem" }} />
+      </IconButton>
       <div ref={addRef}>
-      <Main
-        notes={notes}
-        userData={userData}
-        error={!!userError}
-        onMakeNotesClick={scrollToNotes}
-        currentNote={currentNote}
-        setCurrentNote={setCurrentNote}
-        handleAddNote={handleAddNote}
-      />
+        <Main
+          notes={notes}
+          userData={userData}
+          error={!!userError}
+          onMakeNotesClick={scrollToNotes}
+          currentNote={currentNote}
+          setCurrentNote={setCurrentNote}
+          handleAddNote={handleAddNote}
+        />
       </div>
-      {(notes && notes.length > 0) && (
+      {notes && notes.length > 0 && (
         <div ref={notesRef}>
           <Notes
             onAddClick={scrollToAdd}

@@ -7,8 +7,12 @@ import SaveIcon from "@mui/icons-material/Save";
 import NotificationAddIcon from "@mui/icons-material/NotificationAdd";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import Tilt from "react-parallax-tilt";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import Notification from "./Notification";
+import { fadeIn } from "../../utils/motion";
+import { motion } from "framer-motion";
+
 interface Note {
   _id: string;
   title: string;
@@ -38,9 +42,11 @@ export default function Notes({
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string>("");
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+
   const toggleDialog = () => {
     setOpenDialog((prev) => !prev);
   };
+
   useEffect(() => {
     if (token) fetchNotes();
   }, [fetchNotes, token]);
@@ -57,212 +63,235 @@ export default function Notes({
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-      hour12: false,
+      hour12: false, // Changed to 12-hour format for consistency
     });
 
     return { date, time };
   };
 
   return (
-    <Box className="notes-background">
+    <Box className="notes-background black-gradient" padding={2}>
       <Box
         sx={{
           position: "relative",
           zIndex: 1,
           width: "100%",
+          maxWidth: "1200px",
+          margin: "0 auto",
         }}
       >
-        <Grid container spacing={2} sx={{ marginTop: "25px", width: "100%" }}>
-          {notes.map((note) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              key={note._id}
-              sx={{
-                flexGrow: 0,
-                maxWidth: "100%",
-                boxSizing: "border-box",
-              }}
-            >
-              <Box
-                display="flex"
-                flexDirection="column"
-                gap={1}
-                boxShadow={1}
-                sx={{
-                  background: "#fff",
-                  padding: 1.4,
-                  borderRadius: 4,
-                  width: "100%",
-                  minWidth: 0,
-                }}
+        <Grid container spacing={3} sx={{ marginTop: "25px" }}>
+          {notes.map((note, index) => (
+            <Grid item xs={12} sm={6} md={4} key={note._id}>
+              <Tilt
+                tiltMaxAngleX={15}
+                tiltMaxAngleY={15}
+                scale={1.02}
+                transitionSpeed={450}
+                style={{ margin: "20px" }}
               >
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  alignItems={"center"}
+                <motion.div
+                  variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
+                  initial="hidden"
+                  animate="show"
+                  className="w-full green-pink-gradient p-[1px] rounded-[12px] shadow-card"
                 >
-                  {note.notification ? (
-                    <IconButton size={"small"} color="secondary" title="You will be notified one day before deadline">
-                      <NotificationsActiveIcon />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      size={"small"}
-                      color="secondary"
-                      onClick={() => {
-                        setActiveId(note._id);
-                        toggleDialog();
-                      }}
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    gap={1}
+                    className="bg-tertiary rounded-[20px]"
+                    boxShadow={3}
+                    padding={2}
+                  >
+                    <Box
+                      display="flex"
+                      flexDirection="row"
+                      justifyContent="space-between"
+                      alignItems="center"
                     >
-                      <NotificationAddIcon />
-                    </IconButton>
-                  )}
-                  {!note.sendDate ? (
-                    <Typography variant="caption" color="secondary">
-                      <KeyboardDoubleArrowLeftIcon />
-                      Set Notification Alert
-                    </Typography>
-                  ) : (
+                      {note.notification ? (
+                        <IconButton
+                          size="small"
+                          color="secondary"
+                          title="You will be notified one day before deadline"
+                        >
+                          <NotificationsActiveIcon />
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          size="small"
+                          color="success"
+                          className="text-green-100"
+                          onClick={() => {
+                            setActiveId(note._id);
+                            toggleDialog();
+                          }}
+                        >
+                          <NotificationAddIcon />
+                        </IconButton>
+                      )}
+                      {!note.sendDate ? (
+                        <Typography
+                          variant="caption"
+                          className="text-green-100"
+                        >
+                          <KeyboardDoubleArrowLeftIcon fontSize="small" /> Set
+                          Notification Alert
+                        </Typography>
+                      ) : (
+                        <Typography
+                          variant="caption"
+                          className="text-purple-100"
+                        >
+                          {`Deadline: ${
+                            formatDateAndTime(note.sendDate).date
+                          } ${formatDateAndTime(note.sendDate).time}`}
+                        </Typography>
+                      )}
+                    </Box>
+                    <Box
+                      display="flex"
+                      flexDirection="row"
+                      justifyContent="space-between"
+                    >
+                      <Typography
+                        variant="caption"
+                        color="primary"
+                        contentEditable={editingNoteId === note._id}
+                        suppressContentEditableWarning
+                        onBlur={(e) =>
+                          setNotes((prevNotes: Note[]) =>
+                            prevNotes.map((prevNote) =>
+                              prevNote._id === note._id
+                                ? {
+                                    ...prevNote,
+                                    tag: e.target.textContent || "",
+                                  }
+                                : prevNote
+                            )
+                          )
+                        }
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        #{note.tag}
+                      </Typography>
+                      <Typography variant="caption" className="text-blue-100">
+                        {`Date: ${formatDateAndTime(note.date).date} Time: ${
+                          formatDateAndTime(note.date).time
+                        }`}
+                      </Typography>
+                    </Box>
                     <Typography
-                      variant="caption"
-                      color="error"
-                    >{`Deadline: ${
-                      formatDateAndTime(note.sendDate).date
-                    } ${formatDateAndTime(note.sendDate).time} `}</Typography>
-                  )}
-                </Box>
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                >
-                  <Typography
-                    variant="caption"
-                    color="primary"
-                    contentEditable={editingNoteId === note._id}
-                    suppressContentEditableWarning
-                    onBlur={(e) =>
-                      setNotes((prevNotes: Note[]) =>
-                        prevNotes.map((prevNote) =>
-                          prevNote._id === note._id
-                            ? { ...prevNote, tag: e.target.textContent || "" }
-                            : prevNote
+                      fontWeight="bold"
+                      variant="h5"
+                      className="capitalize text-green-200"
+                      gutterBottom
+                      contentEditable={editingNoteId === note._id}
+                      suppressContentEditableWarning
+                      onBlur={(e) =>
+                        setNotes((prevNotes) =>
+                          prevNotes.map((prevNote) =>
+                            prevNote._id === note._id
+                              ? {
+                                  ...prevNote,
+                                  title: e.target.textContent || "",
+                                }
+                              : prevNote
+                          )
                         )
-                      )
-                    }
-                  >
-                    #{note.tag}
-                  </Typography>
-                  <Typography variant="caption" color="textSecondary">
-                    {`Date: ${formatDateAndTime(note.date).date} Time: ${
-                      formatDateAndTime(note.date).time
-                    }`}
-                  </Typography>
-                </Box>
-                <Typography
-                  fontWeight="bold"
-                  variant="h5"
-                  marginY={1}
-                  className="capitalize"
-                  gutterBottom
-                  contentEditable={editingNoteId === note._id}
-                  suppressContentEditableWarning
-                  onBlur={(e) =>
-                    setNotes((prevNotes) =>
-                      prevNotes.map((prevNote) =>
-                        prevNote._id === note._id
-                          ? { ...prevNote, title: e.target.textContent || "" }
-                          : prevNote
-                      )
-                    )
-                  }
-                >
-                  {note.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  sx={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: "vertical",
-                  }}
-                  contentEditable={editingNoteId === note._id}
-                  suppressContentEditableWarning
-                  onBlur={(e) =>
-                    setNotes((prevNotes) =>
-                      prevNotes.map((prevNote) =>
-                        prevNote._id === note._id
-                          ? {
-                              ...prevNote,
-                              description: e.target.textContent || "",
-                            }
-                          : prevNote
-                      )
-                    )
-                  }
-                >
-                  {note.description}
-                </Typography>
-                <Box
-                  mt={1.5}
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                >
-                  {editingNoteId !== note._id ? (
-                    <IconButton
-                      title="Edit Note"
-                      size="small"
-                      color="primary"
-                      onClick={() => setEditingNoteId(note._id)}
+                      }
                     >
-                      <BorderColorIcon />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      title="save note"
-                      size="small"
-                      color="secondary"
-                      onClick={() => {
-                        handleSaveEdit(note);
-                        setEditingNoteId(null);
+                      {note.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      className="text-green-300"
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
                       }}
+                      contentEditable={editingNoteId === note._id}
+                      suppressContentEditableWarning
+                      onBlur={(e) =>
+                        setNotes((prevNotes) =>
+                          prevNotes.map((prevNote) =>
+                            prevNote._id === note._id
+                              ? {
+                                  ...prevNote,
+                                  description: e.target.textContent || "",
+                                }
+                              : prevNote
+                          )
+                        )
+                      }
                     >
-                      <SaveIcon />
-                    </IconButton>
-                  )}
-                  <IconButton
-                    title="delete the note"
-                    size="small"
-                    color="error"
-                    onClick={() => handleDeleteNote(note._id)}
-                  >
-                    <DeleteOutlineIcon />
-                  </IconButton>
-                </Box>
-              </Box>
+                      {note.description}
+                    </Typography>
+                    <Box
+                      mt={1.5}
+                      display="flex"
+                      flexDirection="row"
+                      justifyContent="space-between"
+                    >
+                      {editingNoteId !== note._id ? (
+                        <IconButton
+                          title="Edit Note"
+                          size="small"
+                          color="primary"
+                          onClick={() => setEditingNoteId(note._id)}
+                        >
+                          <BorderColorIcon />
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          title="Save Note"
+                          size="small"
+                          color="secondary"
+                          onClick={() => {
+                            handleSaveEdit(note);
+                            setEditingNoteId(null);
+                          }}
+                        >
+                          <SaveIcon />
+                        </IconButton>
+                      )}
+                      <IconButton
+                        title="Delete the note"
+                        size="small"
+                        color="error"
+                        onClick={() => handleDeleteNote(note._id)}
+                      >
+                        <DeleteOutlineIcon />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Tilt>
             </Grid>
           ))}
         </Grid>
-        <IconButton
-          color="primary"
-          size="large"
-          onClick={onAddClick}
-          sx={{ fontSize: "48px" }}
-        >
-          <AddBoxIcon />
-        </IconButton>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <IconButton
+            color="primary"
+            size="large"
+            onClick={onAddClick}
+            sx={{ fontSize: "48px" }}
+          >
+            <AddBoxIcon />
+          </IconButton>
+        </Box>
       </Box>
       {openDialog && (
-        <Notification open={openDialog} refetch=
-        {fetchNotes} toggleDialog={toggleDialog} id={activeId} />
+        <Notification
+          open={openDialog}
+          refetch={fetchNotes}
+          toggleDialog={toggleDialog}
+          id={activeId}
+        />
       )}
     </Box>
   );

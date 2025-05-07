@@ -9,4 +9,4 @@ node_modules
 .env.production.local
 
 # build output
-/build
+/dist

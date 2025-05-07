@@ -5,3 +5,26 @@
     width: 100%;
     height: 100%;
   }
+
+  .logout-button {
+    border: round;
+    font-size: 12px;
+    font-weight: medium;
+    color: black;
+    position: relative;
+    z-index: 10;
+
+    &:active {
+      opacity: 0.85;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      box-shadow: none;
+    }
+
+    @media (min-width: 1024px) {
+      display: inline-block;
+    }
+  }

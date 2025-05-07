@@ -9,6 +9,8 @@ import { SiGithub } from "react-icons/si";
 import image from "../assets/main-bg.jpg";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
+import { slideIn } from "../utils/motion";
 
 interface SignupFormData {
   name: string;
@@ -176,24 +178,28 @@ const Signup: React.FC = () => {
   return (
     <Stack>
       <img alt="nature" className="bg-img" src={image} />
-      <Box
-        minHeight={"100vh"}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
+      <motion.div
+        initial="hidden"
+        animate="show"
+        variants={slideIn("right", "tween", 0.1, 1)}
       >
-        <Box className="signup-box">
-          <Typography
-            variant="h4"
-            color={"white"}
-            textAlign={"center"}
-            fontWeight={"bold"}
-            pt={3}
-          >
-            Signup
-          </Typography>
-          <form onSubmit={handleSubmit} className="my-1 mx-6">
-          
+        <Box
+          minHeight={"100vh"}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Box className="signup-box">
+            <Typography
+              variant="h4"
+              color={"white"}
+              textAlign={"center"}
+              fontWeight={"bold"}
+              pt={3}
+            >
+              Signup
+            </Typography>
+            <form onSubmit={handleSubmit} className="my-1 mx-6">
               <Box display={"flex"} flexDirection={"column"} gap={2}>
                 <Box>
                   <Typography className="label">Name</Typography>
@@ -255,48 +261,52 @@ const Signup: React.FC = () => {
                   </Box>
                 )}
               </Box>
-         
-            {loading ? (
-              <Loader />
-            ) : !viewOtp ? (
-              <Box className="submit-button mt-6">
-                <button type="submit">Generate OTP</button>
+
+              {loading ? (
+                <Loader />
+              ) : !viewOtp ? (
+                <Box className="submit-button mt-6">
+                  <button type="submit">Generate OTP</button>
+                </Box>
+              ) : (
+                <Box className="submit-button mt-6">
+                  <Button
+                    onClick={handleSignup}
+                    // disabled={otpData.otp.length !== 6}
+                  >
+                    Signup
+                  </Button>
+                </Box>
+              )}
+              <Box
+                display={"flex"}
+                flexDirection={"row"}
+                gap={10}
+                justifyContent={"center"}
+              >
+                <FcGoogle
+                  className="font-bold cursor-pointer text-2xl"
+                  onClick={handleGoogleLogin}
+                />
+                <SiGithub
+                  className="github-icon text-2xl"
+                  onClick={handleGithubLogin}
+                />
               </Box>
-            ) : (
-              <Box className="submit-button mt-6">
-                <Button
-                  onClick={handleSignup}
-                  // disabled={otpData.otp.length !== 6}
+              <Box className="bottom">
+                Already have an account?{" "}
+                <span
+                  className="bottom-link"
+                  onClick={() => navigate("/login")}
                 >
-                  Signup
-                </Button>
+                  Login
+                </span>
+                .
               </Box>
-            )}
-            <Box
-              display={"flex"}
-              flexDirection={"row"}
-              gap={10}
-              justifyContent={"center"}
-            >
-              <FcGoogle
-                className="font-bold cursor-pointer text-2xl"
-                onClick={handleGoogleLogin}
-              />
-              <SiGithub
-                className="github-icon text-2xl"
-                onClick={handleGithubLogin}
-              />
-            </Box>
-            <Box className="bottom">
-              Already have an account?{" "}
-              <span className="bottom-link" onClick={() => navigate("/login")}>
-                Login
-              </span>
-              .
-            </Box>
-          </form>
+            </form>
+          </Box>
         </Box>
-      </Box>
+      </motion.div>
     </Stack>
   );
 };

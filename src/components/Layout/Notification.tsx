@@ -132,6 +132,7 @@ import { useGetNotificationMutation } from "../../redux/ApiSlice";
       <Dialog
         className="animate-slideInFromTop"
         open={open}
+        onClose={toggleDialog}
         fullWidth
         sx={{
           width: "1300px",
@@ -156,7 +157,6 @@ import { useGetNotificationMutation } from "../../redux/ApiSlice";
           <Typography
             variant="h5"
             fontWeight="bold"
-            color="primary"
             align="center"
             gutterBottom
           >
@@ -182,21 +182,18 @@ import { useGetNotificationMutation } from "../../redux/ApiSlice";
             >
               <Typography color="text.primary">Deadline</Typography>
               <TextField
-                type="date" // Changed to date only
+                type="date"
                 fullWidth
+                size='small'
                 sx={{ width: "300px" }}
                 required
                 value={formatDateForInput(formData.date)}
                 onChange={handleDateChange}
                 error={errors.date}
                 helperText={helperText.date}
-                InputProps={{
-                  sx: { borderRadius: "8px" },
-                }}
                 inputProps={{
                   min: minDate, // Restrict to future dates
                 }}
-                variant="outlined"
               />
             </Box>
             <Box
@@ -212,22 +209,19 @@ import { useGetNotificationMutation } from "../../redux/ApiSlice";
               <TextField
                 fullWidth
                 required
+                size="small"
                 value={formData.message}
                 onChange={handleCommentChange}
                 error={errors.message}
                 helperText={helperText.message}
                 multiline
                 rows={3}
-                InputProps={{
-                  sx: { borderRadius: "8px" },
-                }}
-                variant="outlined"
               />
             </Box>
           </Box>
         </Box>
-        <DialogActions sx={{ padding: 2, justifyContent: "space-between" }}>
-          <Button onClick={toggleDialog} color="inherit" variant="outlined">
+        <DialogActions sx={{ padding: 1, justifyContent: "space-between" }}>
+          <Button onClick={toggleDialog} variant="outlined">
             Cancel
           </Button>
           <Button onClick={handleSave} color="primary" variant="contained">

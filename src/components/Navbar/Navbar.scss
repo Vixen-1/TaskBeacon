@@ -87,19 +87,12 @@
     }
 
     .signup-button {
-      border-radius: 6px;
-      background: black;
-      padding: 0.5rem 1rem;
-      font-size: 14px;
+      border: round;
+      font-size: 12px;
       font-weight: medium;
-      color: white;
+      color: black;
       position: relative;
       z-index: 10;
-
-      &:hover {
-        color: black;
-        background-color: white;
-      }
 
       &:active {
         opacity: 0.85;
