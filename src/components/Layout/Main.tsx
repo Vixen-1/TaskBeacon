@@ -53,7 +53,7 @@ export default function Main({
     title: "",
     description: "",
   });
-
+console.log(errors, errorsHelperText)
   const validateForm = () => {
     let titleHelperText = "";
     let descriptionHelperText = "";
