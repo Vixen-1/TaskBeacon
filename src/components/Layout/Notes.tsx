@@ -12,6 +12,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import Notification from "./Notification";
 import { fadeIn } from "../../utils/motion";
 import { motion } from "framer-motion";
+import { StarsCanvas } from "../../canvas";
 
 interface Note {
   _id: string;
@@ -70,7 +71,8 @@ export default function Notes({
   };
 
   return (
-    <Box className="notes-background black-gradient" padding={2}>
+    <Box className="notes-background bg-primary" padding={2}>
+      <StarsCanvas />
       <Box
         sx={{
           position: "relative",

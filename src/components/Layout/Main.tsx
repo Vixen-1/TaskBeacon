@@ -1,14 +1,14 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import "../../assets/styles/common.css";
 import "./Layout.scss";
 import { useState } from "react";
-// import image from "../../assets/ohho.jpg";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../Loader";
 import { motion } from "framer-motion";
-import { slideIn, zoomIn } from "../../utils/motion";
+import { zoomIn } from "../../utils/motion";
+import { styles } from "../../styles";
+import { StarsCanvas } from "../../canvas";
+import NotesForm from "./NotesForm";
 
 interface UserData {
   _id: string;
@@ -100,151 +100,78 @@ export default function Main({
   };
 
   return (
-    <Stack className="main black-gradient">
+    <Stack className="main bg-primary">
+      <StarsCanvas />
       <Box className="relative z-10">
         {userData && userData?.name ? (
           <Box className="flex-row">
             {!view ? (
-              <motion.div
-                initial="hidden"
-                animate="show"
-                variants={zoomIn(0.2, 1)}
-                className="text-data"
+              <div
+                className={`${styles.paddingX} absolute inset-0 top-[60px] max-w-7xl mx-auto flex flex-row items-start gap-5`}
               >
-                <h2 className="text-green-200">Welcome, {userData?.name}!</h2>
-                <h4 className="text-green-100">
-                  Let's organize your world, one note at a time!
-                </h4>
-                <Box
-                  display={"flex"}
-                  flexDirection={"row"}
-                  gap={2}
-                  alignItems={"center"}
+                <div className="flex flex-col justify-center items-center mt-5">
+                  <div className="w-5 h-5 rounded-full bg-[#00cea8] animate-pulse" />
+                  <div className="w-1 sm:h-80 h-40 green-gradient" />
+                </div>
+
+                <motion.div
+                  initial="hidden"
+                  animate="show"
+                  variants={zoomIn(0.2, 1)}
+                  className="text-data text-center md:text-left"
                 >
-                  {notes && notes.length > 0 && (
+                  <Typography
+                    variant="h3"
+                    className={`${styles.heroHeadText} font-bold`}
+                  >
+                    Welcome, {userData?.name}!
+                  </Typography>
+                  <Typography variant="h3" className={`${styles.heroSubText}`}>
+                    Let's organize your world, one note at a time!
+                  </Typography>
+                  <Box
+                    display={"flex"}
+                    flexDirection={"row"}
+                    gap={2}
+                    alignItems={"center"}
+                  >
+                    {notes && notes.length > 0 && (
+                      <Button
+                        variant="contained"
+                        className="custom-add-button"
+                        onClick={onMakeNotesClick}
+                      >
+                        View Saved Notes
+                      </Button>
+                    )}
                     <Button
-                      variant="contained"
                       className="custom-add-button"
-                      onClick={onMakeNotesClick}
+                      onClick={() => setView(!view)}
                     >
-                      View Saved Notes
+                      Create New Note
                     </Button>
-                  )}
-                  <Button className="custom-add-button" onClick={() => setView(!view)}>
-                    Create New Note
-                  </Button>
-                </Box>
-              </motion.div>
+                  </Box>
+                </motion.div>
+              </div>
             ) : (
-              <motion.div
-                initial="hidden"
-                animate="show"
-                variants={slideIn("left", "tween", 0, 3)}
-                className="form-data green-pink-gradient p-[1px] shadow-card"
-              >
-                <Box className='bg-tertiary p-5 rounded-[20px]'>
-                <Typography
-                  className="form-heading text-green-300"
-                  variant="h5"
-                  fontWeight="bold"
-                >
-                  Add a New Note
-                </Typography>
-                <form>
-                  <Box className="flex-row">
-                    <Typography
-                    className="text-green-100"
-                      paddingRight={2}
-                      fontWeight="bold"
-                      fontSize={20}
-                    >
-                      Title
-                    </Typography>
-                    <TextField
-                      size="small"
-                      fullWidth
-                      value={currentNote.title}
-                      onChange={(e) =>
-                        setCurrentNote({
-                          ...currentNote,
-                          title: e.target.value,
-                        })
-                      }
-                      error={errors.title}
-                      helperText={errorsHelperText.title}
-                    />
-                  </Box>
-                  <Box className="py-3 flex-row">
-                    <Typography
-                    className="text-green-100"
-                      paddingRight={4.5}
-                      fontWeight="bold"
-                      fontSize={20}
-                    >
-                      Description
-                    </Typography>
-                    <TextField
-                      multiline
-                      rows={4}
-                      fullWidth
-                      value={currentNote.description}
-                      onChange={(e) =>
-                        setCurrentNote({
-                          ...currentNote,
-                          description: e.target.value,
-                        })
-                      }
-                      error={errors.description}
-                      helperText={errorsHelperText.description}
-                    />
-                  </Box>
-                  <Box className="flex-row">
-                    <Typography
-                      paddingRight={3}
-                      className="text-green-100"
-                      fontWeight="bold"
-                      fontSize={20}
-                    >
-                      Tag
-                    </Typography>
-                    <TextField
-                      size="small"
-                      fullWidth
-                      value={currentNote.tag}
-                      onChange={(e) =>
-                        setCurrentNote({ ...currentNote, tag: e.target.value })
-                      }
-                    />
-                  </Box>
-                  <Box className="flex-center">
-                    <Button
-                     className="custom-add-button"
-                      startIcon={<FontAwesomeIcon icon={faPlus} />}
-                      onClick={handleSubmit}
-                    >
-                      Add Note
-                    </Button>
-                  </Box>
-                </form>
-                </Box></motion.div>
+              <NotesForm setCurrentNote={setCurrentNote} currentNote={currentNote} handleSubmit={handleSubmit} />
             )}
           </Box>
         ) : (
           <Box className="flex-col animate-pulse">
             {error ? (
-              <Box>
+              <Box className='flex flex-col justify-center items-center'>
                 <Typography
                   className="typography bottom-link"
                   variant="h5"
-                  color="black"
+                  color={`text-secondary`}
                   fontWeight="bold"
                 >
                   Authentication failed!
                 </Typography>
-                <Box className="bottom">
+                <Box className="bottom text-secondary">
                   Go back to Home page{" "}
                   <Button
-                    variant="contained"
                     className="bottom-link"
                     onClick={() => navigate("/")}
                   >
