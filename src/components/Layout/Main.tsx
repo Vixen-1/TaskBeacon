@@ -7,9 +7,8 @@ import Loader from "../Loader";
 import { motion } from "framer-motion";
 import { zoomIn } from "../../utils/motion";
 import { styles } from "../../styles";
-import { StarsCanvas } from "../../canvas";
 import NotesForm from "./NotesForm";
-
+import image from "../../assets/ohho.jpg";
 interface UserData {
   _id: string;
   name: string;
@@ -53,7 +52,7 @@ export default function Main({
     title: "",
     description: "",
   });
-console.log(errors, errorsHelperText)
+  console.log(errors, errorsHelperText);
   const validateForm = () => {
     let titleHelperText = "";
     let descriptionHelperText = "";
@@ -101,19 +100,14 @@ console.log(errors, errorsHelperText)
 
   return (
     <Stack className="main bg-primary">
-      <StarsCanvas />
+      <img src={image} className="w-full h-auto absolute inset-0 z-[-1] opacity-65" />
       <Box className="relative z-10">
         {userData && userData?.name ? (
           <Box className="flex-row">
             {!view ? (
               <div
-                className={`${styles.paddingX} absolute inset-0 top-[60px] max-w-7xl mx-auto flex flex-row items-start gap-5`}
+                className={`${styles.paddingX} absolute inset-10 top-[40px] max-w-7xl mx-auto flex flex-row items-center gap-5`}
               >
-                <div className="flex flex-col justify-center items-center mt-5">
-                  <div className="w-5 h-5 rounded-full bg-[#00cea8] animate-pulse" />
-                  <div className="w-1 sm:h-80 h-40 green-gradient" />
-                </div>
-
                 <motion.div
                   initial="hidden"
                   animate="show"
@@ -122,17 +116,18 @@ console.log(errors, errorsHelperText)
                 >
                   <Typography
                     variant="h3"
-                    className={`${styles.heroHeadText} font-bold`}
+                    className={`font-bold`}
                   >
                     Welcome, {userData?.name}!
                   </Typography>
-                  <Typography variant="h3" className={`${styles.heroSubText}`}>
+                  <Typography variant="h3">
                     Let's organize your world, one note at a time!
                   </Typography>
                   <Box
                     display={"flex"}
                     flexDirection={"row"}
                     gap={2}
+                    mt={3}
                     alignItems={"center"}
                   >
                     {notes && notes.length > 0 && (
@@ -154,13 +149,18 @@ console.log(errors, errorsHelperText)
                 </motion.div>
               </div>
             ) : (
-              <NotesForm setCurrentNote={setCurrentNote} currentNote={currentNote} handleSubmit={handleSubmit} />
+              <NotesForm
+                setCurrentNote={setCurrentNote}
+                currentNote={currentNote}
+                handleSubmit={handleSubmit}
+                onMakeNotesClick={onMakeNotesClick}
+              />
             )}
           </Box>
         ) : (
           <Box className="flex-col animate-pulse">
             {error ? (
-              <Box className='flex flex-col justify-center items-center'>
+              <Box className="flex flex-col justify-center items-center">
                 <Typography
                   className="typography bottom-link"
                   variant="h5"
@@ -171,10 +171,7 @@ console.log(errors, errorsHelperText)
                 </Typography>
                 <Box className="bottom text-secondary">
                   Go back to Home page{" "}
-                  <Button
-                    className="bottom-link"
-                    onClick={() => navigate("/")}
-                  >
+                  <Button className="bottom-link" onClick={() => navigate("/")}>
                     Go Back
                   </Button>
                 </Box>

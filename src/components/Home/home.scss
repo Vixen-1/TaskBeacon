@@ -1,11 +1,4 @@
-// Import Google Fonts
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+DK+Uloopet:wght@100..400&display=swap');
 
-// Custom font face (note: using the same Google Font URL as @import, adjust if needed)
-@font-face {
-  font-family: mySecondFont;
-  src: url('https://fonts.googleapis.com/css2?family=Playwrite+DK+Uloopet:wght@100..400&display=swap');
-}
 
 .home {
   position: relative;
@@ -33,27 +26,21 @@
     align-items: center;
 
     .text-content {
-      font-size: 58px;
-      line-height: 1;
-      font-weight: bold;
+      font-size: 50px;
+      font-weight: 600;
       margin: 4px;
-      font-family: mySecondFont;
-      &.animate-fadeIn {
-        animation: fadeIn 2s ease-in-out forwards;
+       & > div {
+        text-align: center;
       }
     }
 
     .sub-content {
-      font-family: mySecondFont;
-      font-size: 20px;
+      font-size: 18px;
       margin: 2px;
-      &.animate-fadeIn {
-        animation: fadeIn 4s ease-in-out forwards; // Delayed fade
-      }
-
-      & > div {
+ & > div {
         text-align: center;
       }
+     
     }
 
     .lower-content {
@@ -87,6 +74,42 @@
     }
   }
 }
+
+@media (min-width: 768px) {
+    .text-content {
+      font-size: 50px;
+    }
+
+    .sub-content {
+      font-size: 18px;
+    }
+
+    .bottom-nav {
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .text-content {
+      font-size: 32px;
+      text-align: center;
+    }
+
+    .sub-content {
+      font-size: 16px;
+      padding: 0 10px;
+    }
+
+    .bottom-nav {
+      font-size: 16px;
+    }
+
+    .start-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
 
 @keyframes fadeIn {
   from {

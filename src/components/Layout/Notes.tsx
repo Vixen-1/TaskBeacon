@@ -12,8 +12,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import Notification from "./Notification";
 import { fadeIn } from "../../utils/motion";
 import { motion } from "framer-motion";
-import { StarsCanvas } from "../../canvas";
-
+import bgimage from "../../assets/ohho.jpg"
 interface Note {
   _id: string;
   title: string;
@@ -72,7 +71,7 @@ export default function Notes({
 
   return (
     <Box className="notes-background bg-primary" padding={2}>
-      <StarsCanvas />
+      <img src={bgimage} className="w-full h-auto absolute inset-0 z-[-1] opacity-65" />
       <Box
         sx={{
           position: "relative",
@@ -82,7 +81,7 @@ export default function Notes({
           margin: "0 auto",
         }}
       >
-        <Grid container spacing={3} sx={{ marginTop: "25px" }}>
+        <Grid container spacing={3}>
           {notes.map((note, index) => (
             <Grid item xs={12} sm={6} md={4} key={note._id}>
               <Tilt
@@ -90,19 +89,18 @@ export default function Notes({
                 tiltMaxAngleY={15}
                 scale={1.02}
                 transitionSpeed={450}
-                style={{ margin: "20px" }}
               >
                 <motion.div
                   variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
                   initial="hidden"
                   animate="show"
-                  className="w-full green-pink-gradient p-[1px] rounded-[12px] shadow-card"
+                  className="w-full h-[250px] black-gradient p-[1px] rounded-[12px] shadow-card"
                 >
                   <Box
                     display="flex"
                     flexDirection="column"
                     gap={1}
-                    className="bg-tertiary rounded-[20px]"
+                    className="bg-tertiary h-[250px] rounded-[20px]"
                     boxShadow={3}
                     padding={2}
                   >

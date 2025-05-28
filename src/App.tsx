@@ -14,7 +14,7 @@ const Layout = React.lazy(() => import("./pages/Layout"));
 
 function App() {
   return (
-    <BrowserRouter basename="inotes">
+    <BrowserRouter basename="taskbeacon">
       <Provider store={store}>
         <div className="App">
           <Suspense fallback={<div><Loader /></div>}>

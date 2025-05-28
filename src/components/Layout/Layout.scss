@@ -6,23 +6,17 @@ $transition-duration: 0.5s;
 $primary-color: #1976d2;
 
 .notes-background {
-    margin: 0 auto;
-    padding: 30px;
     position: relative;
     width: 100%;
+    background: cover;
     min-height: 100vh;
     overflow: hidden;  
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      // background-color: rgba(0, 0, 0, 0.5);
-      z-index: 0;
-    }
+      .absolute.inset-0 {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
+}
 
 .main {
   position: relative;
@@ -52,102 +46,19 @@ $primary-color: #1976d2;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
-      width: 90%; // w-11/12
-      max-width: 80rem; // max-w-5xl
-      margin: 0 auto;
+      width: 95%;
 
       .text-data {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 1rem;
-        width: 60%;
-
-        h2 {
-        margin-top: 50px;
-          font-size: 44px;
-          cursor: default;
-          font-weight: 600;
-          // color: #000;
-          text-transform: capitalize;
-          min-height: 6rem;
-        }
-
-        h4 {
-          font-size: 1rem;
-          cursor: default;
-          letter-spacing: 0.1em;
-          text-transform: capitalize;
-          font-weight: 400;
-          min-height: 6rem;
-          @media (min-width: 768px) {
-            font-size: 2rem;
-          }
-        }
-
-        button {
-          margin-top: 3rem;
-        }
       }
 
       .form-data {
-        position: relative;
-        overflow: hidden;
-        // padding: 1rem;
-        // margin: auto;
-        width: 50%;
+        width: 65%;
         border-radius: 12px;
         box-shadow: $shadow-light;
-        margin-top: 1rem;
-        transition: transform $transition-duration, box-shadow $transition-duration;
-
-        &:hover {
-          transform: scale(1.01);
-          box-shadow: $shadow-hover;
-        }
-
-        .form-heading {
-          text-align: center;
-          margin-bottom: 1rem;
-          // color: rgba(0, 0, 0, 1);
-        }
-
-        form {
-          .flex-row {
-            display: flex;
-            flex-direction: row;
-            gap: 1rem;
-            justify-content: space-between;
-            align-items: center;
-
-            .typography {
-              padding-right: 0.5rem;
-              font-weight: bold;
-              font-size: 1.25rem;
-
-              &:nth-child(2) {
-                padding-right: 1.125rem;
-              }
-
-              &:nth-child(3) {
-                padding-right: 0.75rem; // padding-right: 3
-              }
-            }
-
-          }
-
-          .flex-center {
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-
-            button {
-              font-weight: bold;
-            }
-          }
-        }
       }
     }
 
@@ -155,31 +66,16 @@ $primary-color: #1976d2;
     .flex-col {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem; // gap-6
+      gap: 10px;
       justify-content: center;
-      letter-spacing: 0.2em; // tracking-widest
-      &.animate-pulse {
-        animation: pulse 1.5s infinite;
-      }
-
-      .typography {
-        color: #000;
-        font-weight: bold;
-        &.bottom-link {
-          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); // drop-shadow-lg
-        }
-      }
-
-      .bottom {
-        font-weight: bold;
-      }
+      letter-spacing: 2px;
     }
   }
 }
 
 .custom-add-button,
 .MuiButton-root.custom-add-button {
-  background: linear-gradient(45deg, #D8B4FE, #BFDBFE); /* purple-200 to blue-200 */
+  background: gray; /* purple-200 to blue-200 */
   color: #fff;
   font-weight: bold;
   font-size: 1rem;
@@ -193,7 +89,8 @@ $primary-color: #1976d2;
 
 .custom-add-button:hover,
 .MuiButton-root.custom-add-button:hover {
-  background: linear-gradient(45deg, #BBF7D0, #DBEAFE); /* green-200 to blue-100 */
+  background: white; /* green-200 to blue-100 */
+  color: gray;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 

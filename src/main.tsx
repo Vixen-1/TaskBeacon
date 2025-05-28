@@ -3,6 +3,12 @@ import App from "./App.tsx";
 import "./index.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import '@fontsource/poppins'; // Defaults to 400
+// Optional: import different weights or styles
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <>

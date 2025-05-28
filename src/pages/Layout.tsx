@@ -135,7 +135,7 @@ export default function Layout() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-green-100 via-blue-100 to-purple-100">
+    <div>
       <IconButton
         className="logout-button"
         onClick={handleLogout}
@@ -145,7 +145,7 @@ export default function Layout() {
           top: "16px",
           right: "16px",
           zIndex: 50,
-          color: "#D8B4FE", // purple-200
+          color: "#BBF7D0", // purple-200
           padding: "8px",
           "&:hover": {
             color: "#BBF7D0", // green-200
@@ -158,7 +158,7 @@ export default function Layout() {
           background: "transparent",
         }}
       >
-        <LogoutIcon sx={{ fontSize: "1.5rem" }} />
+        <LogoutIcon sx={{ fontSize: "2rem" }} />
       </IconButton>
       <div ref={addRef}>
         <Main

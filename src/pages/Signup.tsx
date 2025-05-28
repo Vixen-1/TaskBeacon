@@ -162,8 +162,6 @@ const Signup: React.FC = () => {
     setOtpData((prev) => ({ ...prev, email: formData.email }));
   }, [formData.email]);
 
-  // ...
-
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Only allow numbers and max 6 digits
@@ -199,11 +197,12 @@ const Signup: React.FC = () => {
             >
               Signup
             </Typography>
-            <form onSubmit={handleSubmit} className="my-1 mx-6">
-              <Box display={"flex"} flexDirection={"column"} gap={2}>
+            <form onSubmit={handleSubmit} className="mx-6">
+              <Box display={"flex"} flexDirection={"column"} gap={1}>
                 <Box>
                   <Typography className="label">Name</Typography>
                   <TextField
+                  fullWidth
                     type="text"
                     name="name"
                     id="name"
@@ -217,6 +216,7 @@ const Signup: React.FC = () => {
                 <Box>
                   <Typography className="label">Email</Typography>
                   <TextField
+                  fullWidth
                     type="email"
                     name="email"
                     id="email"
@@ -231,6 +231,7 @@ const Signup: React.FC = () => {
                   <Box>
                     <Typography className="label">Password</Typography>
                     <TextField
+                    fullWidth
                       type="password"
                       name="password"
                       id="password"
@@ -245,17 +246,12 @@ const Signup: React.FC = () => {
                   <Box>
                     <Typography className="label">OTP</Typography>
                     <TextField
+                      fullWidth
                       type="otp"
                       name="OTP"
                       id="otp"
                       value={otpData.otp}
                       onChange={handleOtpChange}
-                      // error={otpData.otp.length !== 6}
-                      // helperText={
-                      //   otpData.otp.length !== 6
-                      //     ? "Enter a valid 6-digit OTP"
-                      //     : ""
-                      // }
                       className="input-login"
                     />
                   </Box>
@@ -265,14 +261,15 @@ const Signup: React.FC = () => {
               {loading ? (
                 <Loader />
               ) : !viewOtp ? (
-                <Box className="submit-button mt-6">
-                  <button type="submit">Generate OTP</button>
+                <Box mt={1} mb={2} display={'flex'} justifyContent={'center'}>
+                  <Button variant="contained" type="submit" sx={{height: '35px', width: "200px"}}>Generate OTP</Button>
                 </Box>
               ) : (
-                <Box className="submit-button mt-6">
+                <Box mt={1} mb={2} display={'flex'} justifyContent={'center'}>
                   <Button
+                  sx={{height: '35px', width: "200px"}}
+                  variant="contained"
                     onClick={handleSignup}
-                    // disabled={otpData.otp.length !== 6}
                   >
                     Signup
                   </Button>

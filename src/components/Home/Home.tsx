@@ -3,7 +3,7 @@ import image from "../../assets/main-bg.jpg";
 import { Box, Button, Stack } from "@mui/material";
 import "./home.scss"; // Update to use SCSS
 import "../../App.css";
-import Navbar from "../Navbar/Navbar";
+// import Navbar from "../Navbar/Navbar";
 import { motion } from "framer-motion";
 import { slideIn, zoomIn } from "../../utils/motion";
 
@@ -12,7 +12,7 @@ export default function Home() {
 
   return (
     <Stack position={"relative"} height={"100vh"} className="home">
-      <Navbar />
+      {/* <Navbar /> */}
       <img alt="nature" className="bg-img" src={image} />
       <Box
         display={"flex"}
@@ -27,7 +27,9 @@ export default function Home() {
           variants={slideIn("up", "tween", 0.75, 1)}
           className="text-content"
         >
-          Welcome to INotes
+          <div>
+          Welcome to TaskBeacon
+          </div>
         </motion.h1>
         <motion.div
           initial="hidden"
@@ -36,10 +38,10 @@ export default function Home() {
           className="sub-content"
         >
           <div>
-            Your ultimate solution for managing notes effortlessly on the cloud.
+            Your ultimate solution for managing tasks effortlessly on the cloud.
           </div>
           <div className="text-center">
-            We will keep your notes private and accessible only to you.
+            We will keep your tasks private and accessible only to you.
           </div>
           <div className="text-center">To organize Your Thoughts</div>
         </motion.div>

@@ -1,109 +1,133 @@
 @keyframes slideInFromTop {
-    from {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
   }
-  
-  .animate-slideInFromTop {
-    animation: slideInFromTop 3s ease-out backwards;
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
+}
 
-  .input{
-    background: rgba(255, 255, 255, 0.89) !important;
-    height: 45px !important;
-    width: 100% !important;
+.animate-slideInFromTop {
+  animation: slideInFromTop 3s ease-out backwards;
+}
+
+.input {
+  background: rgba(255, 255, 255, 0.89) !important;
+  height: 45px !important;
+  width: 100% !important;
+}
+.MuiInputBase-input.MuiOutlinedInput-input {
+  background: rgba(255, 255, 255, 0.886) !important;
+}
+
+.signup-box {
+  width: 90vw;
+  max-width: 500px;
+  height: auto;
+  padding: 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Optional: For very small screens */
+@media (max-width: 480px) {
+  .signup-box {
+    width: 95vw;
+    padding: 12px;
+    max-width: 95%;
   }
-.MuiInputBase-input.MuiOutlinedInput-input{
-    background: rgba(255, 255, 255, 0.886) !important;
 }
 
-
-.signup-box{
-    width: 100%;
-    height: 91%;
-    max-width: 35%;
-    max-height: 91%;
-    padding-top: 8px;
-    background-color: rgb(0, 0, 0, 0.5);
-    box-shadow: 0pc;
-    border-radius: 20px;
-    position: fixed;
+/* Optional: For larger screens */
+@media (min-width: 768px) {
+  .signup-box {
+    padding: 24px;
+  }
 }
 
-.label{
-    color: white;
-    font-style: mySecondFont;
+.label {
+  color: white;
+  font-style: mySecondFont;
 }
 
-.input{
-    width: 100%;
-    height: 45px;
-    /* min-height: 50px; */
-    /* line-height: 50px; */
-}
-.input-login{
+.input {
   width: 100%;
-  height: 52px;
+  height: 45px;
+  /* min-height: 50px; */
+  /* line-height: 50px; */
+}
+.input-login {
+  .MuiInputBase-root.MuiOutlinedInput-root {
+    height: 45px;
+    border: none !important;
+    font-family: "Poppins";
+    border-radius: 10px !important;
+  }
+  .MuiInputBase-root.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+  }
+  .MuiInputBase-input.MuiOutlinedInput-input {
+    height: 0px;
+    padding: 15px;
+  }
+  .MuiInputBase-root.MuiOutlinedInput-root.Mui-focused
+    .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+  }
+  .MuiInputBase-root {
+    border-radius: 4px;
+    border: none !important;
+  }
+  .MuiInputBase-input {
+    font-size: 13px;
+  }
+  .MuiInputLabel-root {
+    font-size: 14px;
+    top: -4px;
+  }
+  .MuiInputLabel-shrink {
+    top: 0;
+  }
+}
+.input-desc {
+  width: 100%;
+  height: 125px;
+  line-height: 125px;
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-radius: 8px;
+}
+
+.bottom {
+  font-weight: 400;
+  font-size: 20px;
+  padding: 4px;
+  margin-top: 6px;
+  text-align: center;
   color: white;
 }
-.input-desc{
-  width: 100%;
-    height: 125px;
-    line-height: 125px;
-    background:rgba(255,255,255, 0.4) !important;
-    border-radius: 8px;
+.bottom-link {
+  font-weight: bolder;
+  color: rgb(65, 153, 241);
+  cursor: pointer;
 }
-.submit-button{
-    text-align: center;
-    margin-left: 26%;
-    width: 200px;
-    font-size: 16px;
-    padding: 6px 2px;
-    font-weight: 500;
-    margin-top: 14px;
-    margin-bottom: 20px;
-    color: white;
-    background-color: rgb(65, 153, 241);
-    border-radius: 4px;
-  
-  }
-.submit-button:hover{
-    background-color: white;
-    color: rgb(65, 153, 241);
-}
-.bottom{
-    font-weight: 400;
-    font-size: 20px;
-    padding: 4px;
-    margin-top: 6px;
-    text-align: center;
-    color: white;
-}
-.bottom-link{
-    font-weight: bolder;
-    color: rgb(65, 153, 241);
-    cursor: pointer;
-
-}
-.github-icon{
+.github-icon {
   font-weight: bolder;
   color: white;
   cursor: pointer;
-
 }
-
 
 /* home page  */
 
 .main-page {
-    position: relative;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-  }
-  
+  position: relative;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+}

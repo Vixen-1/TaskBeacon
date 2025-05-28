@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/inotes/',
+  base: '/taskbeacon/',
   server: {
     port: 3000
   }

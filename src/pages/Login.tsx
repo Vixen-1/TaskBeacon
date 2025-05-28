@@ -3,7 +3,7 @@ import { useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 import image from "../assets/main-bg.jpg";
-import { Box, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
 import Loader from "../components/Loader";
@@ -38,7 +38,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'https://todo-cloudy.onrender.com/api/auth/login',
+        "https://todo-cloudy.onrender.com/api/auth/login",
         formData,
         {
           headers: {
@@ -54,18 +54,18 @@ const Login = () => {
       }
       if (response.data.error) {
         await setError(response.data.error);
-        toast.error(error)
+        toast.error(error);
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         await setError(err.response.data.error);
-        toast.error(error)
+        toast.error(error);
         console.error(error);
       } else {
         setError("An unexpected error occurred.");
-        toast.error(error)
+        toast.error(error);
       }
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -81,82 +81,95 @@ const Login = () => {
   return (
     <Stack className="signup">
       <img alt="nature" className="bg-img" src={image} />
-     <motion.div initial="hidden"
-    animate="show" variants={slideIn('left', "tween", 0.1, 1)}>
-     <Box
-        minHeight={"100vh"}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
+      <motion.div
+        initial="hidden"
+        animate="show"
+        variants={slideIn("left", "tween", 0.1, 1)}
       >
-        <Box className="signup-box">
-          <Typography
-            color={"white"}
-            fontWeight={'bold'}
-            variant="h4"
-            textAlign={"center"}
-            paddingTop={3}
-          >
-            Login
-          </Typography>
-          <form onSubmit={handleSubmit} className="form mx-10 my-6">
-            <Box display={'flex'} flexDirection={'column'} gap={2} >
-              <Box>
-                <Typography className="label">Email</Typography>
-                <TextField
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="input-login text-white"
-                />
+        <Box
+          minHeight={"100vh"}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Box className="signup-box">
+            <Typography
+              color={"white"}
+              fontWeight={"bold"}
+              variant="h4"
+              textAlign={"center"}
+              paddingTop={3}
+            >
+              Login
+            </Typography>
+            <form onSubmit={handleSubmit} className="form mx-10 my-2">
+              <Box display={"flex"} flexDirection={"column"} gap={2}>
+                <Box>
+                  <Typography className="label">Email</Typography>
+                  <TextField
+                    fullWidth
+                    type="email"
+                    name="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="input-login text-white"
+                  />
+                </Box>
+                <Box>
+                  <Typography className="label pt-4">Password</Typography>
+                  <TextField
+                    fullWidth
+                    type="password"
+                    name="password"
+                    id="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="input-login text-white"
+                  />
+                </Box>
               </Box>
-              <Box>
-                <Typography className="label pt-4">Password</Typography>
-                <TextField
-                  type="password"
-                  name="password"
-                  id="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="input-login text-white"
-                />
-              </Box>
+              {loading ? (
+                <Box className="pt-5">
+                  <Loader />
+                </Box>
+              ) : (
+                <Box display={'flex'} justifyContent={'center'} mt={3}>
+                  <Button variant='contained' onClick={handleSubmit} sx={{width: '200px', height: '35px'}}>
+                    Login
+                  </Button>
+                </Box>
+              )}
+            </form>
+
+            <Box
+              display={"flex"}
+              flexDirection={"row"}
+              gap={10}
+              justifyContent={"center"}
+            >
+              <FcGoogle
+                className="font-bold cursor-pointer text-2xl"
+                onClick={handleGoogleLogin}
+              />
+              <SiGithub
+                className="github-icon text-2xl"
+                onClick={handleGithubLogin}
+              />
             </Box>
-            {loading? <Box className="pt-5"><Loader /></Box> : <Box className="submit-button mt-10">
-              <button type="submit">Login</button>
-            </Box>}
-          </form>
 
-          <Box
-            display={"flex"}
-            flexDirection={"row"}
-            gap={10}
-            justifyContent={"center"}
-          >
-            <FcGoogle
-              className="font-bold cursor-pointer text-2xl"
-              onClick={handleGoogleLogin}
-            />
-            <SiGithub
-              className="github-icon text-2xl"
-              onClick={handleGithubLogin}
-            />
-          </Box>
-
-          <Box className="bottom">
-            Don't have an account?{" "}
-            <span className="bottom-link" onClick={() => navigate("/Signup")}>
-              Signup
-            </span>
-            .
+            <Box className="bottom">
+              Don't have an account?{" "}
+              <span className="bottom-link" onClick={() => navigate("/Signup")}>
+                Signup
+              </span>
+              .
+            </Box>
           </Box>
         </Box>
-      </Box>
-     </motion.div>
+      </motion.div>
     </Stack>
   );
 };
