@@ -1,7 +1,6 @@
 {
   "name": "taskbeacon",
   "private": true,
-  "homepage": "/taskbeacon",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
