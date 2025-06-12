@@ -66,37 +66,35 @@ export default function Notes({
   };
 
   return (
-    <Box paddingBottom={4}>
+    <Box padding={4} height="100vh">
       <Grid
         sx={{
           position: "relative",
           zIndex: 1,
-          width: "100%",
-          maxWidth: "1200px",
-          margin: "0 auto",
         }}
         container
         spacing={3}
       >
         {notes.map((note, index) => (
           <Grid item xs={12} sm={6} md={4} key={note._id}>
-            <Tilt
+            <Box p={1}>
+              <Tilt
               tiltMaxAngleX={15}
               tiltMaxAngleY={15}
-              scale={1.02}
+              scale={1.01}
               transitionSpeed={450}
             >
               <motion.div
                 variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
                 initial="hidden"
                 animate="show"
-                className="w-full h-[250px] black-gradient p-[1px] rounded-[12px] shadow-card"
+                className="w-full h-[250px] black-gradient p-[2px] rounded-[20px]"
               >
                 <Box
                   display="flex"
                   flexDirection="column"
                   gap={1}
-                  className="bg-tertiary h-[250px] rounded-[20px]"
+                  className="bg-[#0f1a4b] h-[245px] rounded-[20px]"
                   boxShadow={3}
                   padding={2}
                 >
@@ -109,22 +107,20 @@ export default function Notes({
                     {note.notification ? (
                       <IconButton
                         size="small"
-                        color="secondary"
                         title="You will be notified one day before deadline"
                       >
-                        <NotificationsActiveIcon />
+                        <NotificationsActiveIcon className="text-blue-200" />
                       </IconButton>
                     ) : (
                       <IconButton
                         size="small"
                         color="success"
-                        className="text-green-100"
                         onClick={() => {
                           setActiveId(note._id);
                           toggleDialog();
                         }}
                       >
-                        <NotificationAddIcon />
+                        <NotificationAddIcon className="text-green-300" />
                       </IconButton>
                     )}
                     {!note.sendDate ? (
@@ -133,7 +129,7 @@ export default function Notes({
                         Notification Alert
                       </Typography>
                     ) : (
-                      <Typography variant="caption" className="text-purple-100">
+                      <Typography variant="caption" className="text-yellow-100">
                         {`Deadline: ${formatDateAndTime(note.sendDate).date} ${
                           formatDateAndTime(note.sendDate).time
                         }`}
@@ -147,7 +143,6 @@ export default function Notes({
                   >
                     <Typography
                       variant="caption"
-                      color="primary"
                       contentEditable={editingNoteId === note._id}
                       suppressContentEditableWarning
                       onBlur={(e) =>
@@ -162,11 +157,11 @@ export default function Notes({
                           )
                         )
                       }
-                      sx={{ fontWeight: "bold" }}
+                      sx={{ fontWeight: "bold", color: "cyan" }}
                     >
                       #{note.tag}
                     </Typography>
-                    <Typography variant="caption" className="text-blue-100">
+                    <Typography variant="caption" className="text-yellow-100">
                       {`Date: ${formatDateAndTime(note.date).date} Time: ${
                         formatDateAndTime(note.date).time
                       }`}
@@ -231,10 +226,9 @@ export default function Notes({
                       <IconButton
                         title="Edit Note"
                         size="small"
-                        color="primary"
                         onClick={() => setEditingNoteId(note._id)}
                       >
-                        <BorderColorIcon />
+                        <BorderColorIcon className="text-cyan-200" />
                       </IconButton>
                     ) : (
                       <IconButton
@@ -246,21 +240,21 @@ export default function Notes({
                           setEditingNoteId(null);
                         }}
                       >
-                        <SaveIcon />
+                        <SaveIcon className="text-purple-200" />
                       </IconButton>
                     )}
                     <IconButton
                       title="Delete the note"
                       size="small"
-                      color="error"
                       onClick={() => handleDeleteNote(note._id)}
                     >
-                      <DeleteOutlineIcon />
+                      <DeleteOutlineIcon className="text-red-300" />
                     </IconButton>
                   </Box>
                 </Box>
               </motion.div>
             </Tilt>
+            </Box>
           </Grid>
         ))}
       </Grid>

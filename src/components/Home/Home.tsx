@@ -23,7 +23,7 @@ export default function Home() {
         variants={slideIn("up", "tween", 0.75, 1)}
         className="text-content"
       >
-        <div className="text-[44px] font-semibold text-[#BBF7D0]">
+        <div className="text-[48px] font-semibold text-[#BBF7D0]">
           Welcome to TaskBeacon
         </div>
       </motion.h1>
