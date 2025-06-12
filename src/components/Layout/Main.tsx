@@ -1,14 +1,11 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Dialog, Typography } from "@mui/material";
 import "../../assets/styles/common.css";
 import "./Layout.scss";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Loader from "../Loader";
-import { motion } from "framer-motion";
-import { zoomIn } from "../../utils/motion";
-import { styles } from "../../styles";
-import NotesForm from "./NotesForm";
-import image from "../../assets/ohho.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FcViewDetails } from "react-icons/fc";
+
 interface UserData {
   _id: string;
   name: string;
@@ -26,14 +23,15 @@ interface Note {
 }
 
 export default function Main({
-  notes,
-  userData,
-  error,
+  view,
+  onClose,
   onMakeNotesClick,
   currentNote,
   setCurrentNote,
   handleAddNote,
 }: {
+  view: boolean;
+  onClose: () => void;
   notes: Note[];
   userData: UserData | null;
   error: boolean | null;
@@ -42,17 +40,15 @@ export default function Main({
   setCurrentNote: (note: Note) => void;
   handleAddNote: () => void;
 }) {
-  const navigate = useNavigate();
   const [errors, setErrors] = useState({
     title: false,
     description: false,
   });
-  const [view, setView] = useState<boolean>(false);
   const [errorsHelperText, setErrorsHelperText] = useState({
     title: "",
     description: "",
   });
-  console.log(errors, errorsHelperText);
+
   const validateForm = () => {
     let titleHelperText = "";
     let descriptionHelperText = "";
@@ -99,89 +95,122 @@ export default function Main({
   };
 
   return (
-    <Stack className="main bg-primary">
-      <img src={image} className="w-full h-auto absolute inset-0 z-[-1] opacity-65" />
-      <Box className="relative z-10">
-        {userData && userData?.name ? (
-          <Box className="flex-row">
-            {!view ? (
-              <div
-                className={`${styles.paddingX} absolute inset-10 top-[40px] max-w-7xl mx-auto flex flex-row items-center gap-5`}
-              >
-                <motion.div
-                  initial="hidden"
-                  animate="show"
-                  variants={zoomIn(0.2, 1)}
-                  className="text-data text-center md:text-left"
-                >
-                  <Typography
-                    variant="h3"
-                    className={`font-bold`}
-                  >
-                    Welcome, {userData?.name}!
-                  </Typography>
-                  <Typography variant="h3">
-                    Let's organize your world, one note at a time!
-                  </Typography>
-                  <Box
-                    display={"flex"}
-                    flexDirection={"row"}
-                    gap={2}
-                    mt={3}
-                    alignItems={"center"}
-                  >
-                    {notes && notes.length > 0 && (
-                      <Button
-                        variant="contained"
-                        className="custom-add-button"
-                        onClick={onMakeNotesClick}
-                      >
-                        View Saved Notes
-                      </Button>
-                    )}
-                    <Button
-                      className="custom-add-button"
-                      onClick={() => setView(!view)}
-                    >
-                      Create New Note
-                    </Button>
-                  </Box>
-                </motion.div>
-              </div>
-            ) : (
-              <NotesForm
-                setCurrentNote={setCurrentNote}
-                currentNote={currentNote}
-                handleSubmit={handleSubmit}
-                onMakeNotesClick={onMakeNotesClick}
-              />
+    <Dialog
+      className="animate-slideInFromTop"
+      open={view}
+      onClose={onClose}
+      fullWidth
+      PaperProps={{
+        sx: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+          overflow: "visible",
+        },
+      }}
+    >
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={2}
+        padding={4}
+        sx={{
+          backgroundColor: "#ccc",
+          borderRadius: "20px",
+        }}
+      >
+        <Typography
+          fontSize={"24px"}
+          textAlign={"center"}
+          fontWeight={600}
+          fontFamily={"Poppins"}
+          className={"text-primary"}
+        >
+          Add a New Note
+        </Typography>
+        <form className="flex flex-col gap-2">
+          <Box className="flex flex-col">
+            <span className="text-white font-semibold">Title</span>
+            <input
+              type="text"
+              name="title"
+              value={currentNote.title}
+              onChange={(e) =>
+                setCurrentNote({
+                  ...currentNote,
+                  title: e.target.value,
+                })
+              }
+              placeholder="What's the title?"
+              className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+            />
+            {errors.title && (
+              <span className="text-red-600 text-[11px] mt-1">
+                {errorsHelperText.title}
+              </span>
             )}
           </Box>
-        ) : (
-          <Box className="flex-col animate-pulse">
-            {error ? (
-              <Box className="flex flex-col justify-center items-center">
-                <Typography
-                  className="typography bottom-link"
-                  variant="h5"
-                  color={`text-secondary`}
-                  fontWeight="bold"
-                >
-                  Authentication failed!
-                </Typography>
-                <Box className="bottom text-secondary">
-                  Go back to Home page{" "}
-                  <Button className="bottom-link" onClick={() => navigate("/")}>
-                    Go Back
-                  </Button>
-                </Box>
-              </Box>
-            ) : (
-              <Loader />
+          <Box className="flex flex-col">
+            <span className="text-white font-semibold">Description</span>
+            <textarea
+              rows={4}
+              name="description"
+              placeholder="Please describe"
+              value={currentNote.description}
+              onChange={(e) =>
+                setCurrentNote({
+                  ...currentNote,
+                  description: e.target.value,
+                })
+              }
+              className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+            />
+            {errors.description && (
+              <span className="text-red-600 text-[11px] mt-1">
+                {errorsHelperText.description}
+              </span>
             )}
           </Box>
-        )}
+          <Box className="flex flex-col">
+            <span className="text-white font-semibold">Tag</span>
+            <input
+              name="tag"
+              placeholder="Please give a tag"
+              value={currentNote.tag}
+              onChange={(e) =>
+                setCurrentNote({
+                  ...currentNote,
+                  tag: e.target.value,
+                })
+              }
+              className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+            />
+          </Box>
+        </form>
       </Box>
-    </Stack>
+      <Box
+        display={"flex"}
+        flexDirection={"row"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        gap={1}
+        pt={2}
+        px={4}
+      >
+        <Button
+          className="custom-add-button"
+          startIcon={<FontAwesomeIcon icon={faPlus} />}
+          onClick={handleSubmit}
+        >
+          Add Note
+        </Button>
+        <Button
+          className="custom-add-button"
+          startIcon={<FcViewDetails />}
+          onClick={onMakeNotesClick}
+        >
+          View Notes
+        </Button>
+      </Box>
+    </Dialog>
   );
 }

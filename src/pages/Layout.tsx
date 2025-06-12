@@ -11,8 +11,9 @@ import {
 } from "../redux/ApiSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 interface Note {
   _id: string;
@@ -52,6 +53,7 @@ export default function Layout() {
   });
 
   const navigate = useNavigate();
+   const [view, setView] = useState<boolean>(false);
   const token = secureLocalStorage.getItem("authToken");
   const { data: userResponse, error: userError, refetch: refetchUserData } = useGetUserDataQuery({});
   const { data: apiResponse = [], error, refetch } = useGetAllDataQuery({});
@@ -65,7 +67,7 @@ export default function Layout() {
 
   const [addNoteMutation] = useAddNoteMutation();
   const handleAddNote = async () => {
-    if (!currentNote.title || !currentNote.description || !currentNote.tag) {
+    if (!currentNote.title || !currentNote.description) {
       toast.info("Please enter required fields.");
       return;
     }
@@ -135,15 +137,39 @@ export default function Layout() {
   };
 
   return (
-    <div>
+    <Box>
+      <Box display={'flex'} flexDirection={'column'} gap={3}><IconButton
+        className="logout-button"
+        onClick={() => setView(!view)}
+        title="Logout"
+        sx={{
+          position: "fixed",
+          top: "16px",
+          right: "0px",
+          zIndex: 50,
+          color: "#BBF7D0",
+          padding: "8px",
+          "&:hover": {
+            color: "#BBF7D0",
+            transform: "scale(1.2)",
+            background: "transparent",
+          },
+          "&:active": {
+            transform: "scale(1)",
+          },
+          background: "transparent",
+        }}
+      >
+        <AddBoxIcon sx={{ fontSize: "2rem" }} />
+      </IconButton>
       <IconButton
         className="logout-button"
         onClick={handleLogout}
         title="Logout"
         sx={{
           position: "fixed",
-          top: "16px",
-          right: "16px",
+          top: "48px",
+          right: "0px",
           zIndex: 50,
           color: "#BBF7D0", // purple-200
           padding: "8px",
@@ -159,9 +185,11 @@ export default function Layout() {
         }}
       >
         <LogoutIcon sx={{ fontSize: "2rem" }} />
-      </IconButton>
+      </IconButton></Box>
       <div ref={addRef}>
         <Main
+          view={view}
+          onClose={() => setView(!view)}
           notes={notes}
           userData={userData}
           error={!!userError}
@@ -183,6 +211,6 @@ export default function Layout() {
           />
         </div>
       )}
-    </div>
+    </Box>
   );
 }

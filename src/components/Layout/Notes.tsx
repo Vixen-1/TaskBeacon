@@ -8,7 +8,6 @@ import NotificationAddIcon from "@mui/icons-material/NotificationAdd";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import Tilt from "react-parallax-tilt";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import Notification from "./Notification";
 import { fadeIn } from "../../utils/motion";
 import { motion } from "framer-motion";
@@ -28,7 +27,6 @@ export default function Notes({
   setNotes,
   fetchNotes,
   handleSaveEdit,
-  onAddClick,
   handleDeleteNote,
 }: {
   notes: Note[];
@@ -63,7 +61,7 @@ export default function Notes({
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-      hour12: false, // Changed to 12-hour format for consistency
+      hour12: false,
     });
 
     return { date, time };
@@ -94,7 +92,7 @@ export default function Notes({
                   variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
                   initial="hidden"
                   animate="show"
-                  className="w-full h-[250px] black-gradient p-[1px] rounded-[12px] shadow-card"
+                  className="w-full h-[250px] black-gradient p-[3px] rounded-[12px] shadow-card"
                 >
                   <Box
                     display="flex"
@@ -102,7 +100,7 @@ export default function Notes({
                     gap={1}
                     className="bg-tertiary h-[250px] rounded-[20px]"
                     boxShadow={3}
-                    padding={2}
+                    padding={3.5}
                   >
                     <Box
                       display="flex"
@@ -274,16 +272,6 @@ export default function Notes({
             </Grid>
           ))}
         </Grid>
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <IconButton
-            color="primary"
-            size="large"
-            onClick={onAddClick}
-            sx={{ fontSize: "48px" }}
-          >
-            <AddBoxIcon />
-          </IconButton>
-        </Box>
       </Box>
       {openDialog && (
         <Notification

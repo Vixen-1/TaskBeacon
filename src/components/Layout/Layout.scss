@@ -73,6 +73,13 @@ $primary-color: #1976d2;
   }
 }
 
+.form-data {
+        width: 100%;
+        // height: 900px;
+        border-radius: 12px;
+        box-shadow: $shadow-light;
+      }
+
 .custom-add-button,
 .MuiButton-root.custom-add-button {
   background: gray; /* purple-200 to blue-200 */
