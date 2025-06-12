@@ -5,6 +5,8 @@ import React, { Suspense } from "react";
 import Loader from "./components/Loader";
 import "./assets/styles/common.css";
 import "./App.css";
+import { Stack } from "@mui/material";
+import { StarsCanvas } from "./canvas";
  
 const Home = React.lazy(() => import("./components/Home/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
@@ -16,7 +18,8 @@ function App() {
   return (
     <BrowserRouter>
       <Provider store={store}>
-        <div className="App">
+        <Stack className="App bg-primary">
+          <StarsCanvas />
           <Suspense fallback={<div><Loader /></div>}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -27,7 +30,7 @@ function App() {
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </Suspense>
-        </div>
+        </Stack>
       </Provider>
     </BrowserRouter>
   );

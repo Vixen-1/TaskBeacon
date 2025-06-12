@@ -142,7 +142,7 @@ export default function Notification({
         gap={2}
         padding={4}
         sx={{
-          backgroundColor: "#ccc",
+          backgroundColor: "#BBF7D0",
           borderRadius: "20px",
         }}
       >
@@ -159,7 +159,7 @@ export default function Notification({
 
         <form className="flex flex-col gap-2">
           <Box className="flex flex-col">
-            <span className="text-white font-semibold">Date</span>
+            <span className="text-[#6f5f5f] font-semibold">Date</span>
             <input
               type="date"
               name="Date"
@@ -176,7 +176,7 @@ export default function Notification({
             )}
           </Box>
           <Box className="flex flex-col">
-            <span className="text-white font-semibold">Comment</span>
+            <span className="text-[#6f5f5f] font-semibold">Comment</span>
             <textarea
               rows={4}
               name="Comment"

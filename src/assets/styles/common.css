@@ -27,8 +27,8 @@
   max-width: 500px;
   height: auto;
   padding: 16px;
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  background-color: #BBF7D0;
   border-radius: 20px;
   position: fixed;
   top: 50%;
@@ -36,7 +36,6 @@
   transform: translate(-50%, -50%);
 }
 
-/* Optional: For very small screens */
 @media (max-width: 480px) {
   .signup-box {
     width: 95vw;
@@ -60,8 +59,6 @@
 .input {
   width: 100%;
   height: 45px;
-  /* min-height: 50px; */
-  /* line-height: 50px; */
 }
 .input-login {
   .MuiInputBase-root.MuiOutlinedInput-root {
@@ -130,4 +127,40 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.7);
   color: white;
+}
+
+.custom-add-button,
+.MuiButton-root.custom-add-button {
+  background: #BBF7D0;
+  color: #6f5f5f;
+  font-weight: bold;
+  font-size: 1rem;
+  height: 30px;
+  width: 200px;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-transform: none;
+  transition: all 0.3s ease;
+}
+
+.custom-add-button:hover,
+.MuiButton-root.custom-add-button:hover {
+  background: white; /* green-200 to blue-100 */
+  color: gray;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.custom-add-button:active,
+.MuiButton-root.custom-add-button:active {
+  transform: translateY(0);
+}
+
+/* Ensure padding and box-sizing for consistency */
+.custom-add-button,
+.MuiButton-root.custom-add-button {
+  box-sizing: border-box;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }

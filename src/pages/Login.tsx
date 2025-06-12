@@ -2,11 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
-import image from "../assets/main-bg.jpg";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
-import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { slideIn } from "../utils/motion";
@@ -79,98 +77,120 @@ const Login = () => {
   };
 
   return (
-    <Stack className="signup">
-      <img alt="nature" className="bg-img" src={image} />
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={slideIn("left", "tween", 0.1, 1)}
+    <motion.div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        pointerEvents: "auto",
+        zIndex: 10,
+        position: "relative",
+      }}
+      initial="hidden"
+      animate="show"
+      variants={slideIn("right", "tween", 0.1, 1)}
+    >
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100%"
       >
         <Box
-          minHeight={"100vh"}
           display={"flex"}
-          justifyContent={"center"}
+          flexDirection={"column"}
+          justifyContent={"space-between"}
           alignItems={"center"}
+          gap={1}
+          pt={2}
+          px={4}
         >
-          <Box className="signup-box">
-            <Typography
-              color={"white"}
-              fontWeight={"bold"}
-              variant="h4"
-              textAlign={"center"}
-              paddingTop={3}
-            >
-              Login
-            </Typography>
-            <form onSubmit={handleSubmit} className="form mx-10 my-2">
-              <Box display={"flex"} flexDirection={"column"} gap={2}>
-                <Box>
-                  <Typography className="label">Email</Typography>
-                  <TextField
-                    fullWidth
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="input-login text-white"
-                  />
-                </Box>
-                <Box>
-                  <Typography className="label pt-4">Password</Typography>
-                  <TextField
-                    fullWidth
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    className="input-login text-white"
-                  />
-                </Box>
-              </Box>
-              {loading ? (
-                <Box className="pt-5">
-                  <Loader />
-                </Box>
-              ) : (
-                <Box display={'flex'} justifyContent={'center'} mt={3}>
-                  <Button variant='contained' onClick={handleSubmit} sx={{width: '200px', height: '35px'}}>
-                    Login
-                  </Button>
-                </Box>
-              )}
-            </form>
-
-            <Box
-              display={"flex"}
-              flexDirection={"row"}
-              gap={10}
-              justifyContent={"center"}
-            >
-              <FcGoogle
-                className="font-bold cursor-pointer text-2xl"
-                onClick={handleGoogleLogin}
-              />
-              <SiGithub
-                className="github-icon text-2xl"
-                onClick={handleGithubLogin}
-              />
+          
+            <Box display={"flex"} justifyContent={"center"} mt={3}>
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                className="custom-add-button"
+                sx={{ width: "200px", height: "35px" }}
+              >
+                {!loading? `Login` : `Logging in...`}
+              </Button>
             </Box>
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            gap={10}
+            justifyContent={"center"}
+            pt={2}
+          >
+            <FcGoogle
+              className="font-bold cursor-pointer text-2xl"
+              onClick={handleGoogleLogin}
+            />
+            <SiGithub
+              className="text-2xl text-[#BBF7D0]"
+              onClick={handleGithubLogin}
+            />
+          </Box>
 
-            <Box className="bottom">
-              Don't have an account?{" "}
-              <span className="bottom-link" onClick={() => navigate("/Signup")}>
-                Signup
-              </span>
-              .
-            </Box>
+          <Box>
+            Don't have an account?
+            <span
+              className="text-[#BBF7D0] text-xl font-serif cursor-pointer"
+              onClick={() => navigate("/Signup")}
+            >
+              {" "}Signup
+            </span>
+            .
           </Box>
         </Box>
-      </motion.div>
-    </Stack>
+        <Box
+          padding={4}
+          sx={{
+            backgroundColor: "#BBF7D0",
+            borderRadius: "20px",
+            width: "100%",
+            maxWidth: "550px",
+          }}
+        >
+          <Typography
+            fontSize={"24px"}
+            textAlign={"center"}
+            fontWeight={600}
+            fontFamily={"Poppins"}
+            className={"text-primary"}
+          >
+            Login
+          </Typography>
+          <form className="flex flex-col gap-2">
+            <Box className="flex flex-col">
+              <span className="text-[#6f5f5f] font-semibold">Email</span>
+              <input
+                type="email"
+                name="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="What's your email?"
+                className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+              />
+            </Box>
+
+            <Box className="flex flex-col">
+              <span className="text-[#6f5f5f] font-semibold">Password</span>
+              <input
+                type="password"
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="What's your password?"
+                className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+              />
+            </Box>
+          </form>
+        </Box>
+      </Box>
+    </motion.div>
   );
 };
 

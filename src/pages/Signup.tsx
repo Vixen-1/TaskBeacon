@@ -3,15 +3,12 @@ import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { Button } from "@mui/material";
 import axios from "axios";
-import { Box, Stack, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { SiGithub } from "react-icons/si";
-import image from "../assets/main-bg.jpg";
-import Loader from "../components/Loader";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { slideIn } from "../utils/motion";
-
 interface SignupFormData {
   name: string;
   email: string;
@@ -117,8 +114,9 @@ const Signup: React.FC = () => {
 
       if (response.data.authToken) {
         secureLocalStorage.setItem("authToken", response.data.authToken);
-        navigate("/mainpage");
+        toast.success("Signup Successful!");
         setError(null);
+        navigate("/login");
       } else if (response.status === 400 && response.data.error) {
         await setError(response.data.error);
         toast.error(`${error}`);
@@ -127,7 +125,6 @@ const Signup: React.FC = () => {
       if (axios.isAxiosError(err) && err.response) {
         await setError(err.response.data.error);
         toast.error(error);
-        console.error(error);
       } else {
         setError("An unexpected error occurred.");
         toast.error(error);
@@ -174,137 +171,157 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <Stack>
-      <img alt="nature" className="bg-img" src={image} />
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={slideIn("right", "tween", 0.1, 1)}
+    <motion.div
+      style={{ width: "100vw", height: "100vh", pointerEvents: 'auto',  zIndex: 10,
+    position: "relative", }}
+      initial="hidden"
+      animate="show"
+      variants={slideIn("left", "tween", 0.1, 1)}
+    >
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100%"
       >
         <Box
-          minHeight={"100vh"}
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
+          padding={4}
+          sx={{
+            backgroundColor: "#BBF7D0",
+            borderRadius: "20px",
+            width: "100%",
+            maxWidth: "550px",
+          }}
         >
-          <Box className="signup-box">
-            <Typography
-              variant="h4"
-              color={"white"}
-              textAlign={"center"}
-              fontWeight={"bold"}
-              pt={3}
-            >
-              Signup
-            </Typography>
-            <form onSubmit={handleSubmit} className="mx-6">
-              <Box display={"flex"} flexDirection={"column"} gap={1}>
-                <Box>
-                  <Typography className="label">Name</Typography>
-                  <TextField
-                  fullWidth
-                    type="text"
-                    name="name"
-                    id="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    error={!!errors.name}
-                    helperText={errors.name}
-                    className="input-login"
-                  />
-                </Box>
-                <Box>
-                  <Typography className="label">Email</Typography>
-                  <TextField
-                  fullWidth
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    error={!!errors.email}
-                    helperText={errors.email}
-                    className="input-login"
-                  />
-                </Box>
-                {!viewOtp ? (
-                  <Box>
-                    <Typography className="label">Password</Typography>
-                    <TextField
-                    fullWidth
-                      type="password"
-                      name="password"
-                      id="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      error={!!errors.password}
-                      helperText={errors.password}
-                      className="input-login"
-                    />
-                  </Box>
-                ) : (
-                  <Box>
-                    <Typography className="label">OTP</Typography>
-                    <TextField
-                      fullWidth
-                      type="otp"
-                      name="OTP"
-                      id="otp"
-                      value={otpData.otp}
-                      onChange={handleOtpChange}
-                      className="input-login"
-                    />
-                  </Box>
+          <Typography
+            fontSize={"24px"}
+            textAlign={"center"}
+            fontWeight={600}
+            fontFamily={"Poppins"}
+            className={"text-primary"}
+          >
+            Signup
+          </Typography>
+          <form className="flex flex-col gap-2">
+            <Box className="flex flex-col">
+              <span className="text-[#6f5f5f] font-semibold">Name</span>
+              <input
+                type="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="What's your name?"
+                className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+              />
+              {errors.name && (
+                <span className="text-red-600 text-[11px]">{errors.name}</span>
+              )}
+            </Box>
+            <Box className="flex flex-col">
+              <span className="text-[#6f5f5f] font-semibold">Email</span>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="What's your email?"
+                className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+              />
+              {errors.email && (
+                <span className="text-red-600 text-[11px]">{errors.email}</span>
+              )}
+            </Box>
+            {!viewOtp ? (
+              <Box className="flex flex-col">
+                <span className="text-[#6f5f5f] font-semibold">Password</span>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="What's your password?"
+                  className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+                />
+                {errors.password && (
+                  <span className="text-red-600 text-[11px]">
+                    {errors.password}
+                  </span>
                 )}
               </Box>
-
-              {loading ? (
-                <Loader />
-              ) : !viewOtp ? (
-                <Box mt={1} mb={2} display={'flex'} justifyContent={'center'}>
-                  <Button variant="contained" type="submit" sx={{height: '35px', width: "200px"}}>Generate OTP</Button>
-                </Box>
-              ) : (
-                <Box mt={1} mb={2} display={'flex'} justifyContent={'center'}>
-                  <Button
-                  sx={{height: '35px', width: "200px"}}
-                  variant="contained"
-                    onClick={handleSignup}
-                  >
-                    Signup
-                  </Button>
-                </Box>
-              )}
-              <Box
-                display={"flex"}
-                flexDirection={"row"}
-                gap={10}
-                justifyContent={"center"}
+            ) : (
+              <Box className="flex flex-col">
+                <span className="text-[#6f5f5f] font-semibold">OTP</span>
+                <input
+                  type="text"
+                  name="otp"
+                  value={otpData.otp}
+                  onChange={handleOtpChange}
+                  placeholder="What's your OTP?"
+                  className="bg-primary hover:bg-tertiary py-2 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
+                />
+              </Box>
+            )}
+          </form>
+        </Box>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+          gap={1}
+          pt={2}
+          px={4}
+        >
+          { !viewOtp ? (
+            <Box mt={1} mb={2} display={"flex"} justifyContent={"center"}>
+              <Button
+                variant="contained"
+                type="submit"
+                className="custom-add-button"
+                onClick={handleSubmit}
               >
-                <FcGoogle
-                  className="font-bold cursor-pointer text-2xl"
-                  onClick={handleGoogleLogin}
-                />
-                <SiGithub
-                  className="github-icon text-2xl"
-                  onClick={handleGithubLogin}
-                />
-              </Box>
-              <Box className="bottom">
-                Already have an account?{" "}
-                <span
-                  className="bottom-link"
-                  onClick={() => navigate("/login")}
-                >
-                  Login
-                </span>
-                .
-              </Box>
-            </form>
+                {!loading? `Generate OTP`:`Generating...`}
+              </Button>
+            </Box>
+          ) : (
+            <Box mt={1} mb={2} display={"flex"} justifyContent={"center"}>
+              <Button
+                variant="contained"
+                className="custom-add-button"
+                onClick={handleSignup}
+              >
+                {!loading? `Signup`: `Singing up...`}
+              </Button>
+            </Box>
+          )}
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            gap={10}
+            justifyContent={"center"}
+          >
+            <FcGoogle
+              className="font-bold text-2xl"
+              onClick={handleGoogleLogin}
+            />
+            <SiGithub
+              className="text-2xl text-[#BBF7D0]"
+              onClick={handleGithubLogin}
+            />
+          </Box>
+          <Box>
+            Already have an account?{" "}
+            <span
+              className="font-serif text-[#BBF7D0] text-xl cursor-pointer"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </span>
+            .
           </Box>
         </Box>
-      </motion.div>
-    </Stack>
+      </Box>
+    </motion.div>
   );
 };
 

@@ -32,3 +32,14 @@ body {
       display: inline-block;
     }
   }
+
+.app {
+    position: relative;
+    background: cover;
+    min-height: 100vh;
+}
+.absolute.inset-0 {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }

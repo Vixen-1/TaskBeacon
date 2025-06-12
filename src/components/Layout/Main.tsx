@@ -6,11 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FcViewDetails } from "react-icons/fc";
 
-interface UserData {
-  _id: string;
-  name: string;
-  email: string;
-}
 
 interface Note {
   _id: string;
@@ -25,17 +20,12 @@ interface Note {
 export default function Main({
   view,
   onClose,
-  onMakeNotesClick,
   currentNote,
   setCurrentNote,
   handleAddNote,
 }: {
   view: boolean;
   onClose: () => void;
-  notes: Note[];
-  userData: UserData | null;
-  error: boolean | null;
-  onMakeNotesClick: () => void;
   currentNote: Note;
   setCurrentNote: (note: Note) => void;
   handleAddNote: () => void;
@@ -114,7 +104,7 @@ export default function Main({
         gap={2}
         padding={4}
         sx={{
-          backgroundColor: "#ccc",
+          backgroundColor: "#BBF7D0",
           borderRadius: "20px",
         }}
       >
@@ -129,7 +119,7 @@ export default function Main({
         </Typography>
         <form className="flex flex-col gap-2">
           <Box className="flex flex-col">
-            <span className="text-white font-semibold">Title</span>
+            <span className="text-[#6f5f5f] font-semibold">Title</span>
             <input
               type="text"
               name="title"
@@ -150,7 +140,7 @@ export default function Main({
             )}
           </Box>
           <Box className="flex flex-col">
-            <span className="text-white font-semibold">Description</span>
+            <span className="text-[#6f5f5f] font-semibold">Description</span>
             <textarea
               rows={4}
               name="description"
@@ -171,7 +161,7 @@ export default function Main({
             )}
           </Box>
           <Box className="flex flex-col">
-            <span className="text-white font-semibold">Tag</span>
+            <span className="text-[#6f5f5f] font-semibold">Tag</span>
             <input
               name="tag"
               placeholder="Please give a tag"
@@ -206,7 +196,7 @@ export default function Main({
         <Button
           className="custom-add-button"
           startIcon={<FcViewDetails />}
-          onClick={onMakeNotesClick}
+          onClick={onClose}
         >
           View Notes
         </Button>

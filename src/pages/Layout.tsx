@@ -11,9 +11,11 @@ import {
 } from "../redux/ApiSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Box, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import { motion } from "framer-motion";
+import { zoomIn } from "../utils/motion";
 
 interface Note {
   _id: string;
@@ -37,9 +39,9 @@ export default function Layout() {
     notesRef.current?.scrollIntoView({ behavior: "smooth" });
   };
   const addRef = useRef<HTMLDivElement>(null);
-  const scrollToAdd = () => {
-    addRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  // const scrollToAdd = () => {
+  //   addRef.current?.scrollIntoView({ behavior: "smooth" });
+  // };
   const [notes, setNotes] = useState<Note[]>([]);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [currentNote, setCurrentNote] = useState<Note>({
@@ -53,9 +55,13 @@ export default function Layout() {
   });
 
   const navigate = useNavigate();
-   const [view, setView] = useState<boolean>(false);
+  const [view, setView] = useState<boolean>(false);
   const token = secureLocalStorage.getItem("authToken");
-  const { data: userResponse, error: userError, refetch: refetchUserData } = useGetUserDataQuery({});
+  const {
+    data: userResponse,
+    error: userError,
+    refetch: refetchUserData,
+  } = useGetUserDataQuery({});
   const { data: apiResponse = [], error, refetch } = useGetAllDataQuery({});
 
   useEffect(() => {
@@ -63,7 +69,15 @@ export default function Layout() {
     if (userError) navigate("/errorpage");
     if (apiResponse && userData !== null) setNotes(apiResponse);
     if (error) toast.error("Error in fetching notes!");
-  }, [apiResponse, error, navigate, refetchUserData, userData, userError, userResponse]);
+  }, [
+    apiResponse,
+    error,
+    navigate,
+    refetchUserData,
+    userData,
+    userError,
+    userResponse,
+  ]);
 
   const [addNoteMutation] = useAddNoteMutation();
   const handleAddNote = async () => {
@@ -137,72 +151,69 @@ export default function Layout() {
   };
 
   return (
-    <Box>
-      <Box display={'flex'} flexDirection={'column'} gap={3}><IconButton
-        className="logout-button"
-        onClick={() => setView(!view)}
-        title="Logout"
-        sx={{
-          position: "fixed",
-          top: "16px",
-          right: "0px",
-          zIndex: 50,
-          color: "#BBF7D0",
-          padding: "8px",
-          "&:hover": {
+    <>
+      <Box display={"flex"} flexDirection={"column"} gap={3}>
+        <IconButton
+          className="logout-button"
+          onClick={() => setView(true)}
+          title="Logout"
+          sx={{
+            position: "fixed",
+            top: "16px",
+            right: "0px",
+            zIndex: 50,
             color: "#BBF7D0",
-            transform: "scale(1.2)",
+            padding: "8px",
+            "&:hover": {
+              color: "#BBF7D0",
+              transform: "scale(1.2)",
+              background: "transparent",
+            },
+            "&:active": {
+              transform: "scale(1)",
+            },
             background: "transparent",
-          },
-          "&:active": {
-            transform: "scale(1)",
-          },
-          background: "transparent",
-        }}
-      >
-        <AddBoxIcon sx={{ fontSize: "2rem" }} />
-      </IconButton>
-      <IconButton
-        className="logout-button"
-        onClick={handleLogout}
-        title="Logout"
-        sx={{
-          position: "fixed",
-          top: "48px",
-          right: "0px",
-          zIndex: 50,
-          color: "#BBF7D0", // purple-200
-          padding: "8px",
-          "&:hover": {
-            color: "#BBF7D0", // green-200
-            transform: "scale(1.2)",
+          }}
+        >
+          <AddBoxIcon sx={{ fontSize: "1.5rem" }} />
+        </IconButton>
+        <IconButton
+          className="logout-button"
+          onClick={handleLogout}
+          title="Logout"
+          sx={{
+            position: "fixed",
+            top: "48px",
+            right: "0px",
+            zIndex: 50,
+            color: "#BBF7D0", // purple-200
+            padding: "8px",
+            "&:hover": {
+              color: "#BBF7D0", // green-200
+              transform: "scale(1.2)",
+              background: "transparent",
+            },
+            "&:active": {
+              transform: "scale(1)",
+            },
             background: "transparent",
-          },
-          "&:active": {
-            transform: "scale(1)",
-          },
-          background: "transparent",
-        }}
-      >
-        <LogoutIcon sx={{ fontSize: "2rem" }} />
-      </IconButton></Box>
+          }}
+        >
+          <LogoutIcon sx={{ fontSize: "1.5rem" }} />
+        </IconButton>
+      </Box>
       <div ref={addRef}>
         <Main
           view={view}
           onClose={() => setView(!view)}
-          notes={notes}
-          userData={userData}
-          error={!!userError}
-          onMakeNotesClick={scrollToNotes}
           currentNote={currentNote}
           setCurrentNote={setCurrentNote}
           handleAddNote={handleAddNote}
         />
       </div>
-      {notes && notes.length > 0 && (
+      {notes && notes.length > 0 ? (
         <div ref={notesRef}>
           <Notes
-            onAddClick={scrollToAdd}
             notes={notes}
             setNotes={setNotes}
             fetchNotes={fetchNotes}
@@ -210,7 +221,40 @@ export default function Layout() {
             handleDeleteNote={handleDeleteNote}
           />
         </div>
+      ): (
+        <Box
+          height="100vh"
+          width="100%"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          className="bg-primary"
+        >
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={zoomIn(0.2, 1)}
+            className="text-center"
+          >
+            <p className={`text-2xl`}>
+              Welcome,{" "}
+              <span className="capitalize font-semibold text-4xl text-[#BBF7D0]">
+                {userData?.name}!
+              </span>
+            </p>
+            <p className="text-2xl">Hope you're doing well!</p>
+            <p className="text-2xl">
+              Let's organize your world, one note at a time!
+            </p>
+            <Button
+              className="custom-add-button"
+              onClick={() => setView(!view)}
+            >
+              Create New Note
+            </Button>
+          </motion.div>
+        </Box>
       )}
-    </Box>
+    </>
   );
 }
