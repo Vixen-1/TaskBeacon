@@ -279,6 +279,7 @@ const Signup: React.FC = () => {
                 type="submit"
                 className="custom-add-button"
                 onClick={handleSubmit}
+                disabled={loading}
               >
                 {!loading? `Generate OTP`:`Generating...`}
               </Button>
@@ -289,6 +290,7 @@ const Signup: React.FC = () => {
                 variant="contained"
                 className="custom-add-button"
                 onClick={handleSignup}
+                disabled={loading}
               >
                 {!loading? `Signup`: `Singing up...`}
               </Button>

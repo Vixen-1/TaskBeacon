@@ -110,7 +110,7 @@ const Login = () => {
                 variant="contained"
                 onClick={handleSubmit}
                 className="custom-add-button"
-                sx={{ width: "200px", height: "35px" }}
+                disabled={loading}
               >
                 {!loading? `Login` : `Logging in...`}
               </Button>

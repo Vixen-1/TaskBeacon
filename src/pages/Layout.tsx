@@ -1,6 +1,6 @@
 import Main from "../components/Layout/Main";
 import Notes from "../components/Layout/Notes";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import secureLocalStorage from "react-secure-storage";
 import {
   useAddNoteMutation,
@@ -34,14 +34,6 @@ interface UserData {
 }
 
 export default function Layout() {
-  const notesRef = useRef<HTMLDivElement>(null);
-  const scrollToNotes = () => {
-    notesRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-  const addRef = useRef<HTMLDivElement>(null);
-  // const scrollToAdd = () => {
-  //   addRef.current?.scrollIntoView({ behavior: "smooth" });
-  // };
   const [notes, setNotes] = useState<Note[]>([]);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [currentNote, setCurrentNote] = useState<Note>({
@@ -101,8 +93,8 @@ export default function Layout() {
         date: "",
       });
       refetch();
-      scrollToNotes();
       toast.success("Notes added successfully!");
+      setView((prev) => !prev);
     } catch (error) {
       toast.error("Error in adding notes");
       console.error("Error adding note:", error);
@@ -186,10 +178,10 @@ export default function Layout() {
             top: "48px",
             right: "0px",
             zIndex: 50,
-            color: "#BBF7D0", // purple-200
+            color: "#BBF7D0", 
             padding: "8px",
             "&:hover": {
-              color: "#BBF7D0", // green-200
+              color: "#BBF7D0", 
               transform: "scale(1.2)",
               background: "transparent",
             },
@@ -202,26 +194,22 @@ export default function Layout() {
           <LogoutIcon sx={{ fontSize: "1.5rem" }} />
         </IconButton>
       </Box>
-      <div ref={addRef}>
-        <Main
-          view={view}
-          onClose={() => setView(!view)}
-          currentNote={currentNote}
-          setCurrentNote={setCurrentNote}
-          handleAddNote={handleAddNote}
-        />
-      </div>
+      <Main
+        view={view}
+        onClose={() => setView(!view)}
+        currentNote={currentNote}
+        setCurrentNote={setCurrentNote}
+        handleAddNote={handleAddNote}
+      />
       {notes && notes.length > 0 ? (
-        <div ref={notesRef}>
-          <Notes
-            notes={notes}
-            setNotes={setNotes}
-            fetchNotes={fetchNotes}
-            handleSaveEdit={handleSaveEdit}
-            handleDeleteNote={handleDeleteNote}
-          />
-        </div>
-      ): (
+        <Notes
+          notes={notes}
+          setNotes={setNotes}
+          fetchNotes={fetchNotes}
+          handleSaveEdit={handleSaveEdit}
+          handleDeleteNote={handleDeleteNote}
+        />
+      ) : (
         <Box
           height="100vh"
           width="100%"

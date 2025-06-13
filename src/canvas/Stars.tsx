@@ -32,8 +32,8 @@ const Stars: FC<StarsProps> = (props) => {
       >
         <PointMaterial
           transparent
-          color="#f272c8"
-          size={0.002}
+          color="#BBF7D0"
+          size={0.003}
           sizeAttenuation={true}
           depthWrite={false}
         />
