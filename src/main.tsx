@@ -7,11 +7,14 @@ import '@fontsource/poppins';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/600.css';
 import '@fontsource/poppins/700.css';
+// import MouseTrailCircles from "./components/mouse.tsx";
+import MouseTrailStars from "./components/MouseTrailStars.tsx";
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <>
     <App />
+    <MouseTrailStars />
     <ToastContainer
       position="top-right"
       autoClose={3000}

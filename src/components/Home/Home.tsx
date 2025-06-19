@@ -58,15 +58,23 @@ export default function Home() {
           Get Started
         </Button>
         <motion.div initial="hidden" animate="show" variants={zoomIn(1, 1)}>
-          To continue, please{" "}
-          <span className="text-xl font-serif text-[#BBF7D0]" onClick={() => navigate("/login")}>
-            Log In
-          </span>{" "}
-          . Already a user?{" "}
-          <span className="text-xl font-serif text-[#BBF7D0]" onClick={() => navigate("/signup")}>
-            Sign Up
-          </span>
-          .
+          <p>
+            To continue, please{" "}
+            <span
+              className="text-2xl cursor-pointer font-serif text-[#BBF7D0] hover:text-[#7aa689]"
+              onClick={() => navigate("/login")}
+            >
+              Log In
+            </span>
+            . Already a user?{" "}
+            <span
+              className="text-2xl cursor-pointer font-serif text-[#BBF7D0] hover:text-[#7aa689]"
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
+            </span>
+            .
+          </p>
         </motion.div>
         <p>Join us and take control of your notes today!</p>
       </Box>

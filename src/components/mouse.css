@@ -1,0 +1,107 @@
+.mouse-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Prevent container from blocking mouse events */
+}
+
+.mouse-circle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.8) 0%, /* Bright highlight */
+    #a2ceb1 100% /* Fade to transparent #BBF7D0 */
+  ); /* Shiny gradient for bubble effect */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Light reflection border */
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 0 10px rgba(255, 255, 255, 0.2), /* Inner glow */
+    0 0 15px rgba(187, 247, 208, 0.3); /* Outer glow with #BBF7D0 */
+  animation: bubble 3s linear forwards; /* Bubble animation */
+}
+
+@keyframes bubble {
+  0% {
+    opacity: 0.8;
+    transform: translateY(0) scale(3); /* Start position and size */
+  }
+  25% {
+    opacity: 0.6;
+    transform: translateY(-10px) scale(1.6); /* Float up and grow slightly */
+  }
+  50% {
+    opacity: 0.4;
+    transform: translateY(-10px) scale(1.4); /* Float up and grow slightly */
+  }
+  75% {
+    opacity: 0.2;
+    transform: translateY(-10px) scale(1.2); /* Float up and grow slightly */
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(1); /* Fade out, float higher, expand */
+  }
+}
+
+
+.star-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Prevent container from blocking mouse events */
+}
+
+.mouse-star {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.9) 0%, /* Bright white center */
+    rgba(187, 247, 208, 0.5) 50%, /* #BBF7D0 glow */
+    rgba(187, 247, 208, 0) 100% /* Fade to transparent */
+  );
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  ); /* Star shape */
+  box-shadow: 0 0 15px rgba(187, 247, 208, 0.7); /* Glowing halo with #BBF7D0 */
+  animation: twinkle 3s linear forwards; /* Twinkling animation */
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.8;
+    transform: translateY(0) scale(3);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.2); /* Brighten and grow */
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-10px) scale(1); /* Dim slightly */
+  }
+  75% {
+    opacity: 1;
+    transform: translateY(-15px) scale(1.2); /* Brighten again */
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(1); /* Fade out */
+  }
+}
